@@ -1,0 +1,100 @@
+---
+title: "Exercicio 3"
+author: ""
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      include = T,
+                      warning = F,
+                      message = F)
+```
+# Atenção
+
+Rode no seu console o seguinte comando
+
+install.packages("tidyquant")
+
+
+# Rode o chunk abaixo
+
+```{r}
+library(tidyverse)
+library(ggthemes)
+library(tidyquant)
+
+bolsa <- tq_get(c("ITUB4.SA","ABEV3.SA","PETR4.SA","^BVSP"),
+                from = "2019-01-01",
+                to = "2019-12-31")
+
+
+df_barra <- bolsa %>% group_by(symbol) %>%
+  tq_transmute(select = "close",
+                       mutate_fun = periodReturn,
+                       period = "yearly",
+                       col_rename = "Retornos") %>%
+  select(-date)
+
+
+df_line <- bolsa %>% filter(symbol == "^BVSP") %>% select(date,close)
+
+df_point <- bolsa %>% group_by(symbol) %>%
+  tq_transmute(select = "close",
+                       mutate_fun = periodReturn,
+                       period = "daily",
+                       col_rename = "Retornos") %>%
+  filter(symbol %in% c("PETR4.SA","ITUB4.SA")) %>% 
+  spread(symbol,Retornos) %>% select(ITUB4.SA,PETR4.SA)
+
+
+```
+
+
+1- Observe o data frame df_barra com head()
+
+```{r}
+
+```
+
+2- Tente construir um grafico de barra onde a coluna symbol seja o eixo x e a coluna Retornos seja o eixo y. 
+
+```{r}
+
+```
+
+
+3- Observe o data frame df_line com head()
+
+```{r}
+
+```
+
+4- Tente construir um grafico de linha onde a coluna date seja o eixo x e a coluna close seja o eixo y. 
+
+```{r}
+
+```
+
+
+5- Observe o data frame df_point com head()
+
+```{r}
+
+```
+
+6- Tente construir um grafico de pontos onde a coluna ITUB4.SA seja o eixo x e a coluna PETR4.SA seja o eixo y. 
+
+```{r}
+
+```
+
+
+
+
+
+
+
+
+

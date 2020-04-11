@@ -1,0 +1,456 @@
+---
+title: "R para Economia"
+author: "Lucas Mendes"
+date: "24/03/2020"
+output: 
+  beamer_presentation:
+    theme: "AnnArbor"
+    colortheme: "dolphin"
+    fonttheme: "structurebold"
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      include = T,
+                      warning = F,
+                      message = F,
+                      fig.width = 5,
+                      fig.height = 3)
+library(tidyverse)
+```
+
+# Séries Temporais
+
+
+## Séries Temporais
+
+Na ultima aula trabalhamos com dados cross section, ou seja, dados que estavam na mesma unidade de tempo.
+
+Agora trabalharemos com dados que variam de acordo com o periodo (Dia,Semana,Mês,Ano)
+
+
+## Séries de tempo
+
+```{r echo=FALSE}
+plot(AirPassengers,type = "l")
+```
+
+## Padrões de uma serie de tempo
+
+### Tendência
+
+A Tendência pode ser analisada como um crescimento ou decrescimento de longo prazo.
+
+### Sazonalidade
+
+A Sazonalidade pode ser identificada como um padrão que ocorre frequentemente em algum periodo do tempo, como dia, mês ou ano.
+
+### Ciclos
+
+Ciclos são tendencias de alta e queda que não possuem uma frequencia bem definida. Elas são costumeiramente geradas por causas econômicas ou chamados de ciclos de negócios.
+
+## Exemplos
+
+![](/cloud/project/image/series.png)
+
+# Decomposição de uma série temporal
+
+## Decomposição de uma série temporal
+
+Uma série temporal tem dois tipos de decomposição, aditiva e multiplicativa.
+
+### Aditiva
+
+$y_{t} = S_{t} + T_{t} + R_{t}$
+
+### Multiplicativa
+
+$y_{t} = S_{t} x T_{t} x R_{t}$
+
+### Explicando
+
+$S_{t}$ = Componente Sazonal<p>
+$T_{t}$ = Componente Ciclo_Tendencia<p>
+$R_{t}$ = Componente Restante (aletório)
+
+
+## Decomposição de uma série temporal
+
+Qual a diferença entre os dois?Além do óbvio
+
+>- Na série com decomposição aditiva, a magnitude da variação sazonal ou ciclo_tendencia não varia com o tempo
+
+>- Já o contrário ocorre na decomposição multiplicativa
+
+>- Vendo graficamente
+
+## Decomposição de uma série temporal
+
+```{r echo=FALSE, fig.show='hold', out.width=c('50%', '50%')}
+
+plot(AirPassengers,type = "l")
+plot(log(AirPassengers),type = "l")
+
+```
+
+## Decomposição de uma série temporal
+
+### Lembrando que
+
+$y_{t} = S_{t} x T_{t} x R_{t}$ = $log(y_{t}) = log(S_{t}) + log(T_{t}) + log(R_{t})$
+
+
+## Decomposição de uma série temporal
+
+### Decomposição clássica
+
+Para demonstrar o método de decomposição clássica, podemos usar o código a seguir
+
+```{r eval=FALSE, include=T}
+library(ggfortify)
+AirPassengers %>% # Base de dados
+  decompose(type="multiplicative") %>% # Decomposição
+  autoplot()  # Grafico
+```
+
+## Decomposição de uma série temporal
+
+### Decomposição clássica
+
+```{r echo=FALSE}
+library(ggfortify)
+AirPassengers %>% 
+  decompose(type="multiplicative") %>% 
+  autoplot()  
+```
+
+# Simple exponential smoothing
+
+## Simple exponential smoothing
+
+Esse método de previsão atribui um peso para as observações passadas para inferir o futuro.
+
+Esse peso na qual chamamos de $\alpha$ varia entre 0 a 1 e decai exponencialmente com o n° de observações.
+
+Ele é útil especialmente quando temos dados sem um tendência ou sazonalidade evidentes
+
+$$
+y_{t + 1|t} = \alpha y_{t} + \alpha (1- \alpha)y + \alpha (1- \alpha)^2 y + ...
+$$
+
+## Simple exponential smoothing
+
+Representação por componentes
+
+Forecast Equaton $y_{t + h|t} = l_{t}$
+
+Smoothing equation $l_{t} = \alpha y_{t} + (1 - \alpha) l_{t - 1}$
+
+
+## Exemplo
+
+Para usar o modelo, temos que recorrer a função `ses()` do pacote `forecast`
+
+```{r}
+library(forecast)
+prev <- AirPassengers %>%
+  ses(h = 12 # Periodos de previsão 
+      )
+```
+
+## Exemplo
+
+```{r}
+prev
+```
+
+## Plotando
+
+```{r}
+autoplot(prev)
+```
+
+# Holt’s linear trend method
+
+## Holt’s linear trend method
+
+Esse método é uma extensão do antigo, possibilitando a previsão de séries com tendência.
+
+
+Forecast Equation: $y_{t+h|t} = l_{t} + hb_{t}$
+
+Level Equation: $l_{t} = \alpha y_{t} + (1 - \alpha)(l_{t - 1} + b{t-1})$
+
+Trend Equation: $b_{t} = \beta^* (l_{t} - l_{t - 1}) + (1 - \beta ^*)b_{t - 1}$
+
+
+Podemos usar esse método usando a função `holt()` do pacote `forecast`
+
+## Holt’s linear trend method
+
+```{r}
+prev <- holt(AirPassengers,h = 12)
+```
+
+## Holt’s linear trend method
+
+```{r}
+prev 
+```
+
+## Holt’s linear trend method
+
+```{r}
+autoplot(prev)
+```
+
+# Holt-Winters’ seasonal method
+
+## Holt-Winters’ seasonal method
+
+Uma segunda extensão do modelo, agora para podermos prever um modelo com sazonalidade. 
+
+Lembrando que temos duas especificações para sazonalidade
+
+- Aditiva
+- Multiplicativa
+
+Para usar o modelo no R, chamamos a função `hw()` do pacote `forecast`
+
+## Holt-Winters’ seasonal method additive
+
+Forecast Equation $y_{t+h|t} = l_{t} + hb_{t} + s_{t+h-m(k+1)}$
+
+Level Equation  $l_{t} = \alpha(y_{t} - s_{t-m}) + (1 - \alpha)(l_{t-1} + b_{t-1})$
+
+Trend Equation $b_{t} = \beta^*(l_{t} - l_{t-1}) + (1 - \beta^*)b_{t-1}$
+
+Seasonal Equation $s_{t} = \gamma (y_{t}-l_{t-1}-b_{t-1}) + (1-\gamma)s_{t-m}$
+
+
+## Holt-Winters’ seasonal method multiplicative
+
+Forecast Equation $y_{t+h|t} = (l_{t} + hb_{t})s_{t+h-m(k+1)}$
+  
+Level Equation  $l_{t} = \alpha \frac{y_{t}}{s_{t-m}} + (1 - \alpha)(l_{t-1} + b_{t-1})$
+  
+Trend Equation  $b_{t} = \beta^*(l_{t}-l_{t-1}) + (1 - \beta^*)b_{t-1}$  
+
+Seasonal Equation  $s_{t} = \gamma \frac{y_{t}}{(l_{t-1} + b_{t-1})} + (1 - \gamma)s_{t-m}$
+
+
+## Holt-Winters’ seasonal method
+
+```{r}
+prev_add <- hw(AirPassengers,
+               seasonal = "additive",
+               h = 12)
+
+prev_mult <- hw(AirPassengers,
+               seasonal = "multiplicative",
+               h = 12)
+```
+
+## Holt-Winters’ seasonal method
+
+```{r}
+autoplot(prev_add)
+```
+
+## Holt-Winters’ seasonal method
+
+```{r}
+autoplot(prev_mult)
+```
+
+# Exercicios
+
+# ARIMA
+
+## ARIMA
+
+Modelos ARIMA providenciam outras aproximações para a previsão de séries temporais. 
+
+Enquanto os modelos de suavização exponencial baseavam - se na descrição de têndencia e sazonalidade dos dados, o modelo ARIMA se baseia na autocorrelação dos dados
+
+
+## Estacionariedade
+
+Antes de começar a falar do ARIMA, precisamos saber o conceito de estacionariedade.
+
+Uma série temporal é dita estacionária quando suas propriedades não variam no tempo. 
+
+Exemplificando fracamente, quando sua média e variancia são constantes em toda a série.
+
+Isso não ocorre quando presenciamos tendências e/ou sazonalidade em uma série.
+
+## Estacionariedade
+
+```{r echo=FALSE}
+library(png)
+library(grid)
+img <- readPNG("/cloud/project/image/stationary-1.png")
+grid.raster(img)
+```
+
+## Estacionariedade
+
+Estacionarias (B,G)
+
+## Diferenciação
+
+Para lidar com o problema da Estacionariedade, podemos usar o conceito de **diferenciação**
+
+Ela é calculada através da diferença entre os pontos consecutivos de uma série, estabilizando assim a média da mesma.
+
+1° Diferença
+
+$$
+y'_{t} = y_{t} - y_{t -1}
+$$
+2° Diferença
+
+$$
+ y''_{t}  =  y'_{t}  - y'_{t - 1} 
+          = y_t - 2y_{t-1} +y_{t-2}
+$$
+Diferença Sazonal
+
+$$
+y'_t = y_t - y_{t-m}
+$$
+
+## Teste de estacionariedade
+
+Há alguns testes que nos informam se uma série é estacionária. Os mais conhecidos são o ADF e o KPSS.
+
+Nós iremos testar se a serie de passagens é estacionária com a função `ur.kpss` do pacote `urca`.
+
+A hipótese nula é que a série é estacionária
+
+```{r eval=FALSE, include=T}
+library(urca)
+
+AirPassengers %>% ur.kpss() %>% summary()
+```
+
+## Teste de estacionariedade
+
+
+```{r echo=FALSE}
+library(urca)
+AirPassengers %>% ur.kpss() %>% summary()
+```
+
+O valor de test-statistic = 2.7395. O valor crítico há 1% é de 0.739
+
+Ou seja, podemos rejeitar que ela é **estacionária**
+
+
+
+## Teste de estacionariedade
+
+Teremos então de diferenciar a série e testar novamente. Podemos diferenciar a série usando a função diff()
+
+```{r eval=FALSE, include=T}
+AirPassengers %>% diff() %>% ur.kpss() %>% summary()
+```
+
+## Teste de estacionariedade
+
+```{r echo=FALSE}
+AirPassengers %>% diff() %>% ur.kpss() %>% summary()
+```
+
+Como o valor de teste é menor do que o valor crítico a 1%, não rejeitamos que a 1° diferença é estacionária.
+
+
+## Modelos Autorregresivos
+
+Modelos auto regressivos são parecidos com os modelos de regressão múltipla. Porém as variaveis exógenas agora são os valores defasados da variável endógena.
+
+$$
+y_{t} = c + \phi_{1}y_{t-1} + \phi_{2}y_{t-2} + \dots + \phi_{p}y_{t-p} + \varepsilon_{t}
+$$
+Nós nos referimos a esses modelos como um AR(p), onde p é a ordem da defasagem
+
+## Modelos de médias móveis
+
+Em vez de usar valores passados da variável de previsão em uma regressão, um modelo de média móvel usa erros de previsão passados em um modelo semelhante a regressão.
+
+$$
+y_{t} = c + \varepsilon_t + \theta_{1}\varepsilon_{t-1} + \theta_{2}\varepsilon_{t-2} + \dots + \theta_{q}\varepsilon_{t-q}
+$$
+Nós nos referimos a isso como um MA (q), um modelo de média móvel de ordem q. Obviamente, não observamos os valores de $\varepsilon$, portanto, não é realmente uma regressão no sentido usual.
+
+
+
+## ARIMA Especificação
+
+Se combinarmos diferenciação com autoregressão e um modelo de média móvel, obteremos um modelo ARIMA não sazonal. O modelo completo não sazonal pode ser escrito como
+
+$$
+ y'_{t} = c + \phi_{1}y'_{t-1} + \cdots + \phi_{p}y'_{t-p}
+     + \theta_{1}\varepsilon_{t-1} + \cdots + \theta_{q}\varepsilon_{t-q} + \varepsilon_{t}
+$$
+
+
+
+## ARIMA Especificando
+
+Nos chamamos esse modelo de ARIMA(p,d,q) onde
+
+p = parte auto regressiva
+d = n° de diferenciações
+q = parte média movel
+
+## Estimando um ARIMA
+
+Especificar um arima por conta prórpia requer prática, o que por enquanto está fora do escopo desse curso.
+
+Porém, o R traz a possibilidade de você estimar o melhor modelo possivel com a função `auto.arima`
+
+##  Gerando o modelo
+
+```{r eval=FALSE, include=T}
+fit <- auto.arima(AirPassengers)
+summary(fit)
+```
+
+##  Gerando o modelo
+
+```{r echo=FALSE}
+fit <- auto.arima(AirPassengers)
+summary(fit)
+```
+
+
+
+## Gerando Previsão
+
+```{r eval=FALSE, include=T}
+prev <- forecast(fit,12)
+```
+
+## Gerando Previsão
+
+```{r echo=FALSE}
+prev <- forecast(fit,12)
+```
+
+## Plotando
+
+```{r eval=FALSE, include=T}
+autoplot(prev)
+```
+
+## Plotando
+
+```{r echo=FALSE}
+autoplot(prev)
+```
+
+# Exercicios
+
+

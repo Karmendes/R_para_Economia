@@ -1,0 +1,326 @@
+---
+title: "R para Economia"
+author: "Lucas Mendes"
+date: "24/03/2020"
+output: 
+  beamer_presentation:
+    theme: "AnnArbor"
+    colortheme: "dolphin"
+    fonttheme: "structurebold"
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T,
+                      include = T,
+                      warning = F,
+                      message = F,
+                      fig.width=5,
+                      fig.height=3)
+
+library(tidyverse)
+```
+
+# Visualização de dados
+
+## Visualização de dados
+
+Uma das coisas mais importantes quando estamos fazendo algum tipo de análise é a visualização dos dados
+
+Caso negligencie essa parte, poderá ter problemas que teriam sido evitados com uma simples olhada em um gráfico.
+
+Por isso é importante sabermos um ferramental básico de contrução de gráficos.
+
+## Visualização de dados
+
+O R possui funções básicas de visualização ja instaladas, como a função `plot()`.
+
+Porém nós iremos aprender utilizando o pacote `ggplot2` que vem instalado junto ao `tidyverse`.
+
+Ele utiliza o conceito de camadas para construir um gráfico, você pode saber mais sobre clicando [aqui](https://ggplot2.tidyverse.org/)
+
+## Tipos de gráficos
+
+Há diversos tipos de gráficos que servem para variados tipos de finalidade. Hoje nós aprenderemos os mais básicos:
+
+- Graficos de barras
+- Graficos de linha
+- Graficos de pontos
+
+# Montando seu primeiro gráfico
+
+
+## Grafico de barras
+
+Primeiro iremos criar um tibble, que é o dataframe do universo tidyverse. Não se preocupe, um tibble é quase a mesma coisa que um data frame
+
+```{r}
+df1 <- tibble(Notas = c(10,8,4,6),
+       Alunos = c("Jão","Maria","Tony","Sofia"))
+df1
+```
+
+## Grafico de barras
+
+Agora iremos mapear os nossos eixos do gráfico (x,y). Se queremos comparar as notas entre os alunos, o nosso eixo x será o nome dos alunos e o eixo y será a nota de cada.
+
+Para mapear os eixos, usaremos o seguinte código:
+
+```{r eval=FALSE, include=T}
+ggplot(df1, # Base de dados
+       aes(
+         x = Alunos, # Eixo x
+         y = Notas) # Eixo y
+       )
+```
+
+
+## Grafico de barras
+
+```{r echo=FALSE}
+ggplot(df1, # Base de dados
+       aes(
+         x = Alunos, # Eixo x
+         y = Notas) # Eixo y
+       )
+```
+
+## Grafico de barras
+
+O que acabamos de fazer foi a primeira camada do nosso gráfico, que é simplesmente o mapeamento dos eixos. Agora iremos de fato definir qual o formato do nosso gráfico, que no caso é o de barras.
+
+```{r eval=FALSE, include=T}
+ggplot(df1, # Base de dados
+       aes(
+         x = Alunos, # Eixo x
+         y = Notas) # Eixo y
+       ) +
+  geom_bar(stat = "identity") # formato do gráfico
+```
+
+## Grafico de barras
+
+```{r echo=FALSE}
+ggplot(df1, # Base de dados
+       aes(
+         x = Alunos, # Eixo x
+         y = Notas) # Eixo y
+       ) +
+  geom_bar(stat = "identity") # formato do gráfico
+```
+
+## Grafico de barras
+
+A função `geom_bar` é a responsável pela geração do gráfico de barras. 
+
+Essa é a segunda camada do nosso gráfico.
+
+Você pode botar mais camadas, mas ai é opcional. Duas é o mínimo.
+
+Repare também que estamos usando o operador `+` ao invés do `%>%`. 
+
+Quando começamos uma função do ggplot2 passamos a usar `+` para ligar as funções.
+
+## Grafico de linha
+
+Normalmente usamos um gráfico de linha para observar dados no tempo
+
+Vamos usar como base de dados o dataframe `economics` do pacote tidyr
+
+```{r}
+head(economics)
+```
+
+## Grafico de linha
+
+Iremos elaboar um grafico de linha que relacione no tempo o número total de desempregados da economia americana em milhares, que é representada pela coluna `unemploy`.
+
+O procedimento da primeira camada é o mesmo do gráfico de barras
+
+```{r eval=FALSE, include=T}
+ggplot(economics, # Base de dados
+       aes(
+         x = date, # Eixo x
+         y =unemploy) # Eixo y
+       )  # formato do gráfico
+```
+
+## Grafico de linha
+
+```{r echo=FALSE}
+ggplot(economics, # Base de dados
+       aes(
+         x = date, # Eixo x
+         y =unemploy) # Eixo y
+       ) 
+```
+
+## Grafico de linha
+
+Para contruir a segunda camada usaremos a função `geom_line`
+
+
+```{r eval=FALSE, include=T}
+ggplot(economics, # Base de dados
+       aes(
+         x = date, # Eixo x
+         y =unemploy) # Eixo y
+       ) +  
+  geom_line() # formato do gráfico
+```
+
+## Grafico de linha
+
+```{r echo=FALSE}
+ggplot(economics, # Base de dados
+       aes(
+         x = date, # Eixo x
+         y =unemploy) # Eixo y
+       ) +  
+  geom_line()
+```
+
+## Grafico de pontos
+
+Um grafico de pontos, ou gráfico de dispersão, tem a finalidade de mostrar o relacionamento entre duas variaveis. Se elas tem um relacionemento positivo ou negativo ou até se não há relacionamento.
+
+Para elaborar um desses, utilizaremos as colunas `psavert` e `pce` da base de dados `economics`
+
+## Grafico de pontos
+
+Mapeando os eixos
+
+```{r eval=FALSE, include=T}
+ggplot(economics, # Base de dados
+       aes(
+         x = pce, # Eixo x
+         y = psavert) # Eixo y
+       ) 
+```
+
+## Gráfico de pontos
+
+```{r echo=FALSE}
+ggplot(economics, # Base de dados
+       aes(
+         x = pce, # Eixo x
+         y = psavert) # Eixo y
+       ) 
+```
+
+## Gráfico de pontos
+
+Utilizaremos agora a função geom_point para criar um gráfico de pontos.
+
+```{r eval=FALSE, include=T}
+ggplot(economics, # Base de dados
+       aes(
+         x = pce, # Eixo x
+         y = psavert) # Eixo y
+       ) +
+  geom_point() # formato do gráfico
+```
+
+## Gráfico de pontos
+
+```{r echo=FALSE}
+ggplot(economics, # Base de dados
+       aes(
+         x = pce, # Eixo x
+         y = psavert) # Eixo y
+       ) +
+  geom_point() # formato do gráfico
+```
+
+# Aesthesics 
+
+## Aesthesics 
+
+Os graficos ainda estão muito simples, há diversas funções para melhorar o visual do pacote. Por enquanto nós iremos carregar o pacote `ggthemes` para melhorar o aspecto visual.
+
+```{r}
+library(ggthemes)
+```
+
+## Aesthesics 
+
+Primeiro irei usar o grafico sobre desemprego como exemplo. Irei grava - lo numa variavel
+
+```{r}
+g1 <- ggplot(economics, # Base de dados
+       aes(
+         x = date, # Eixo x
+         y =unemploy) # Eixo y
+       ) +  
+  geom_line()
+```
+
+## Aesthesics
+
+Agora irei dar um título para o gráfico
+
+```{r eval=FALSE, include=T}
+g1 + labs(title = "Total de Pessoas Desempregadas nos EUA")
+```
+
+## Aesthesics
+
+```{r echo=FALSE}
+g1 + labs(title = "Total de Pessoas Desempregadas nos EUA")
+```
+
+## Aesthesics
+
+Agora irei renomear os eixos x e y e a colocar um caption
+
+```{r eval=FALSE, include=T}
+g1 + labs(title = "Total de Pessoas Desempregadas nos EUA",
+          x = "Ano",
+          y = "Em milhares",
+          caption = "Fonte: FED")
+```
+
+## Aesthesics
+
+```{r echo=FALSE}
+g1 + labs(title = "Total de Pessoas Desempregadas nos EUA",
+          x = "Ano",
+          y = "Em milhares",
+          caption = "Fonte: FED")
+```
+
+
+## Aesthesics
+
+Agora irei mudar o layout do gráfico, para que fique parecido com o layout do jornal **The Economist**. 
+
+```{r eval=FALSE, include=T}
+g1 + labs(title = "Total de Pessoas Desempregadas nos EUA",
+          x = "Ano",
+          y = "Em milhares",
+          caption = "Fonte: FED") +
+  theme_economist()
+```
+
+## Aesthesics
+
+```{r echo=FALSE}
+g1 + labs(title = "Total de Pessoas Desempregadas nos EUA",
+          x = "Ano",
+          y = "Em milhares",
+          caption = "Fonte: FED") +
+  theme_economist()
+```
+
+## Aesthesics
+
+Há **N** maneiras de você "embelezar" o seu gráfico e apresentá lo. Mas isso é materia para um curso de storytelling de dados.
+
+Com isso, leia a documentação do pacote ggplot2 e veja esse [link](https://bbc.github.io/rcookbook/) para ver como a BBC usa o R para fazer gráficos
+
+
+# Exercicios
+
+
+
+

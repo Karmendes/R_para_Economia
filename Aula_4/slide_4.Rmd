@@ -1,0 +1,479 @@
+---
+title: "R para Economia"
+author: "Lucas Mendes"
+date: "24/03/2020"
+output: 
+  beamer_presentation:
+    theme: "AnnArbor"
+    colortheme: "dolphin"
+    fonttheme: "structurebold"
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      include = T,
+                      warning = F,
+                      message = F)
+```
+
+# Modelos Cross - Section
+
+## Regressão Linear Simples
+
+Lembra de sua aula de introdução à microeconomia? Tire seu livro do Mankiw do armário!
+
+Agora pense que você irá analisar o mercado de **bananas**. Representando suas curvas de oferta e demanda
+
+curva de demanda: $Y = \beta_{d} - \alpha_{d} X$
+
+curva de oferta: $Y = \beta_{o} + \alpha_{o} X$
+
+## Regressão Linear Simples
+
+Se considerarmos que $\beta_{d} = 20$ e $\beta_{o} = 10$ sendo que $\alpha_{d}$ = 4 e $\alpha_{o}$ = 6
+
+Temos como agora calcular o equilibrio do mercado igualando a curva de demanda a curva de oferta
+
+$20 - 4X = 10 + 6X$ (1) 
+
+$10 = 10X$  (2)
+
+$1 = X$  (3)
+
+Quandidade de equilibrio = 1
+
+Preço de equilibrio = 16
+
+## Regressão Linear Simples
+
+Isso foi o que você provavelmente fez em introdução a micro ou algo do tipo
+
+So que nessa época, o seu professor te dava os valores de $\alpha$ e $\beta$
+
+Agora você mesmo irá calcula - los!
+
+## Disclaimer
+
+
+
+$Y = \beta_{1} + \beta_{2} X$
+
+>-O Y pode ser chamado de varios nomes, como variavel regressora, variavel dependente, variavel resposta e por ai vai.
+
+>- Porém eu irei chama - la de variavel **endógena**, ou seja, que é determinada pelo modelo.
+
+>- A mesma coisa vale para X, que tem varios nomes, mas eu chamarei de varável **exógena**.
+
+>- Resumindo
+
+>- O que estiver no lado esquerdo da equação = **endógena**
+>- O que estiver no lado direito da equação = **exógena**
+
+
+## Regressão Linear Simples
+
+Nesse capitulo iremos usar o pacote `AER` (Applied Econometrics with R) e o pacote caret (Machine Learning)
+
+Cole no console e rode
+```{r}
+# install.packages('AER')
+# install.packages('caret')
+```
+
+```{r}
+library(AER)
+library(caret)
+library(tidyverse)
+```
+
+## Regressão Linear Simples
+
+Iremos analisar agora a base de dados CPS1985, referente a pesquisa de determinação salarial feita em 1985 nos EUA. 
+
+Queremos verificar qual o impacto do total de anos de educação sobre o salario/hora de um indivíduo
+
+Carregando o pacote
+```{r}
+data('CPS1985')
+```
+
+## Regressão Linear Simples
+
+```{r echo=FALSE}
+head(CPS1985)
+```
+
+
+## Regressão Linear Simples
+
+Iremos agora treinar um modelo de regressão linear usando a função `train()` do pacote **caret**
+
+```{r}
+modelo <- train(wage ~ education,
+      method = "lm",
+      data = CPS1985)
+
+```
+
+## Regressão Linear Simples
+
+$wage = \beta_{1} + \beta_{2} educ$
+
+## Regressão Linear Simples
+
+Para observarmos as estatisticas do nosso modelo, podemos usar o comando  `summary()`. 
+
+```{r eval=FALSE, include=T}
+summary(modelo)
+```
+
+## Regressão Linear Simples
+
+```{r echo=FALSE}
+summary(modelo)
+```
+
+## Regressão Linear Simples
+
+Eu particularmente não gosto muito do formato que o summary nos retorna.
+
+Como eu sigo a filosofia do tidyverse, eu transformo isso para um dataframe com a função `tidy()` do pacote `broom` (Já instalado com tidyverse)
+
+```{r}
+summary(modelo) %>% broom::tidy()
+```
+
+
+## Regressão Linear Simples 
+
+
+
+$wage = -0.74 + educ 0.75$
+
+
+
+## Regressão Linear Simples
+
+O que podemos retirar dessas estatatísticas? 
+
+Normalmente olhamos para essas:
+
+>- O coefieciente das variaveis 
+
+>- O valor *t* dessas variaveis
+
+>- O R²
+
+## Regressão Linear Simples
+
+### Coeficiente
+
+>- Quando analisamos o coeficiente de uma regressão, normalmente nós esperamos o seu sinal devido a uma teoria prévia. 
+
+>- No nosso exemplo esperamos que seja positivo ja que é um consenso que mais anos de estudo impactam positivamente no salario.
+
+>- O que normalmente queremos testar é a magnitude do efeito de uma variavel sobre a outra.
+
+## Regressão Linear Simples
+
+### Coeficiente
+
+- Quando analisamos o coeficiente de uma regressão, normalmente nós esperamos o seu sinal devido a uma teoria prévia. 
+
+- No nosso exemplo esperamos que seja positivo ja que é um consenso que mais anos de estudo impactam positivamente no salario.
+
+- O que normalmente queremos testar é a magnitude do efeito de uma variavel sobre a outra.
+
+```{r echo=FALSE}
+modelo$finalModel
+```
+
+
+## Regressão Linear Simples
+
+### Valor T
+
+>- O valor *t* é um valor que vem da formula $t = \frac{\beta}{EP(\beta)}$
+
+>- Essa pequena conta é um teste estatistico que avalia se o nosso coeficiente é diferente de zero. 
+
+>- A regra de bolso que levamos é que se *t* > |2|, podemos rejeitar que o coeficiente é igual a zero
+
+>- Vamos fazer a conta
+
+## Regressão Linear Simples
+### Valor T
+
+
+```{r echo=FALSE}
+summary(modelo) %>% broom::tidy()
+```
+
+
+
+## Regressão Linear Simples
+
+### R² 
+
+>- O R² mede o poder de explicação de uma regressão
+
+>- Seus valores variam de 0 a 1.
+
+>- No nosso exemplo ele é 0.14, ou 14%
+
+>- Muitos podem se enganar olhando apenas esse indicador, use o com cuidado.
+
+## Regressão Linear Simples
+
+### R² 
+
+```{r}
+summary(modelo) %>% broom::glance()
+```
+
+# Exercicios
+
+# Elasticidades
+
+## Regressão Linear Simples (Elasticidades)
+
+Talvez você ja tenha ouvido falar sobre elasticidades, talvez até calculado na forma discreta.
+
+Para calcular elasticidades, precisamos deixar as variaveis logarizadas usando a função `log()`
+
+No nosso exemplo sobre educação, ficaria da seguinte maneira
+
+```{r}
+modelo <- train(log(wage) ~ log(education),
+      method = "lm",
+      data = CPS1985)
+```
+
+
+## Regressão Linear Simples (Elasticidades)
+
+Observando as estatisticas
+
+```{r}
+summary(modelo) %>% broom::tidy()
+```
+
+## Regressão Linear Simples (Elasticidades)
+
+$log(wage) = 0.07 + 0.78log(educ)$
+
+
+## Regressão Linear Simples (Elasticidades)
+
+>- Agora a interpretação dos coeficientes muda um pouco. 
+
+>- Nós lemos da seguinte maneira:
+
+>- Se eu aumentar meus anos de estudo em 1%
+
+>- Meu salario/hora irá aumentar em média 0.78% 
+
+>- Todas as estatisticas seguem o mesmo procedimento de análise
+
+# Exercicios
+
+# Regressão Linear Multipla
+
+## Regressão Linear Multipla
+
+A regressão linear multipla é quando estamos usando mais de uma varivel endógena.
+
+Exemplo
+
+$$
+wage = \beta_{1} + \beta_{2}educ + \beta_{3}experience 
+$$
+
+
+## Regressão Linear Multipla
+
+Nós usamos a mesma função no R
+
+
+```{r}
+modelo <- train(wage ~ education + experience,
+      method = "lm",
+      data = CPS1985)
+```
+
+## Regressão Linear Multipla
+
+```{r}
+summary(modelo) %>% broom::tidy()
+```
+
+## Regressão Linear Multipla
+
+$wage = -4.9 + 0.92 educ + 0.1 exp$
+
+
+## Regressão Linear Multipla
+
+### F-statistic, Valor - P e R² ajustado
+
+>- Além de todas as estatisticas que estudamos, agora temos mais três para analisar
+
+>- A estatistica F é uma continha que testa se conjuntamente, há pelo menos um coeficiente diferente de zero. 
+
+>- Porém não há uma regra de bolso pois ele depende do graus de liberdade da regressão, então olhamos o valor - p por facilidade.
+
+>- A regra de bolso do valor - p é, caso seja menor que 5%(0.05), sua regressão tem pelo menos um coeficiente diferente de zero.
+
+>- O R² de uma regressão sempre irá crescer ou pelo menos ficar constante caso você acrescente uma variavel endógena
+
+>- Por isso, para compararmos regressões multiplas, usamos o R² ajustado, que penaliza o incremento de variáveis que não ajudem o modelo a explicar melhor
+
+## Regressão Linear Multipla
+
+### F-statistic, Valor - P e R² ajustado
+
+```{r}
+summary(modelo) %>% broom::glance()
+```
+
+
+
+# Regressão com variáveis categóricas
+
+## Regressão com variáveis categóricas
+
+>- Até agora vimos regressões somente com variáveis endógenas contínuas e/ou discretas.
+
+>- Agora iremos ver como aplicar regressões com variaveis exógenas categóricas, na qual representam classes.
+
+>- Para quem não sabe o que são as categóricas aqui em baixo vão dois exemplos:
+
+>- Categóricas cardinais: Quando não há um ordenamento. Sexo (H,M)
+
+>- Categóricas ordinais: Quando há um ordenamento. Educação (Doutorado > Mestrado > Graduação)
+
+>- No R essas variáveis são da classe `factor`
+
+# Exercicios
+
+## Regressão com variáveis categóricas
+
+```{r}
+# Gender é uma variavel categorica
+modelo <- train(wage ~ education + experience + gender, 
+      method = "lm",
+      data = CPS1985)
+```
+
+## Regressão com variáveis categóricas
+
+```{r}
+summary(modelo) %>% broom::tidy()
+```
+
+## Regressão com variáveis categóricas
+
+
+$wage = -4.16 + educ 0.94 + exp 0.11 - genderfemale 2.33$
+
+
+# Modelo Logístico
+
+## Modelo Logístico
+
+O modelo de regressão logística também usa variáveis categóricas, so que agora endógenamente.
+
+Ou seja, não queremos agora prever um possível número médio, mas sim uma classe como **sim** ou **não**.
+
+Vamos pensar o contrário na nossa base de dados agora. Dado o salário/hora,anos de educação e experiencia conseguimos descobrir se a pessoa é do sexo masculino ou feminino?
+
+
+## Modelo Logístico
+
+```{r}
+modelo <- train(gender ~ wage + education + experience, 
+      method = "glm",
+      family = "binomial",
+      data = CPS1985)
+```
+
+## Modelo Logístico
+
+```{r}
+summary(modelo)
+```
+
+## Modelo Logístico
+
+$gender = -1.44 - 0.13 wage + 0.14 educ + 0.02 exp$
+
+
+## Modelo Logístico
+
+Considerações sobre o modelo logístico
+
+>- A interpretação dos coeficientes são feitas em forma de probablidade, e temos que passar a fórmula $e^\beta$ para calcula-los
+
+>- O mesmo ocorre com a variavel `gender`, que temos que passar a função $\frac{1}{1 + e^y}$
+
+>- Vamos calcular um exemplo
+
+
+## Modelo Logístico
+
+Caso tívessemos uma observação com as seguintes varíaveis
+
+wage = 5.1, educ = 8, exp = 21, qual seria a probabilidade dessa pessoa ser do gênero feminino
+
+Jogando na fórmula
+
+$-1.44 - 0.13*5.1 + 0.14*8 + 0.02*21 = 0.76$
+
+Jogando agora na formula $\frac{1}{1 + e^(0.76)} = 0.31$
+
+A chance de ser do gênenro feminino seria de 31%
+
+## Modelo Logístico
+
+Agora para isso voltar como uma variavel categórica nós precisamos definir um valor de decisão que varia entre 0 a 1.
+
+>- Na maioria dos casos esse valor é 0.5, ou seja.
+
+>- Se gender > 0.5, o indivíduo é do genero feminino
+
+>- Se gender < 0.5, o indivíduo é do genero masculino
+
+## Modelo Logístico
+
+Podemos automatizar todo esse processo no R com a função `predict`, na qual nos retorna um vetor com a previsão de classificação do nosso data frame.
+
+
+```{r}
+previsao <-predict(modelo,newdata = CPS1985)
+previsao
+```
+
+## Modelo Logístico
+
+Verificando a acurácia do modelo, usando uma matriz de confusão
+
+```{r}
+table(previsao,CPS1985[,"gender"])
+```
+Essa matriz de confusão nos retorna diversos indicadores de acurácia do nosso modelo.
+
+Para calcular a acurácia geral fazemos o seguinte: (218 + 130)/ 534 = 65%
+
+Ou seja, nosso modelo acertou no geral 65% das classificações.
+
+Para saber mais sobre essa matriz, [clique aqui](https://medium.com/data-hackers/entendendo-o-que-%C3%A9-matriz-de-confus%C3%A3o-com-python-114e683ec509)
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,122 @@
+---
+title: "Desafio"
+author: "Lucas Mendes"
+date: "04/04/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+Será que podemos prever a movimentação do IBOV?
+
+Talvez um modelo de regressão logística nos ajude a responder se o IBOV irá subir ou descer amanhã.
+
+Você poderá ajudar a descobrir completando esse notebook.
+
+Leia com atenção todos os passos para aprender! E claro, divirta - se
+
+
+# Carregando pacotes necessários
+
+```{r}
+library(tidyquant)
+```
+
+# Baixando dados do ibov desde 2016
+
+Aqui estamos baixando diretamento do site Yahoo Finance as cotações do índice bovespa desde o dia 1° de janeiro de 2016
+
+```{r}
+df_ibov <- tq_get("^BVSP",from = "2016-01-01")
+df_ibov
+```
+
+# Calculando retornos 
+
+O chunck abaixo calcula o retorno diário do ibovespa desde 2016
+
+```{r}
+df_ibov_retornos <- df_ibov %>% 
+  tq_transmute(select = close,
+               mutate_fun = periodReturn,
+               period = "daily",
+               col_rename = "Retornos")
+df_ibov_retornos
+```
+
+# Criando colunas com lags dos retornos
+
+O chunck abaixo cria 5 colunas referentes aos lags dos retornos do ibovespa.
+
+Exemplo
+
+lag1 = Retorno de ontem
+lag2 = Retorno de onteontem
+lag3 = Retorno de antes de onteontem
+lag4 = ....
+lag5 = ....
+
+
+```{r}
+df_ibov_retornos <- df_ibov_retornos %>%
+  mutate(lag1 = lag(Retornos,1),
+         lag2 = lag(Retornos,2),
+         lag3 = lag(Retornos,3),
+         lag4 = lag(Retornos,4),
+         lag5 = lag(Retornos,5))
+df_ibov_retornos
+```
+
+# Transformando coluna de retornos em variavel categórica
+
+Esse chunk transforma a coluna retorno em uma variavel categórica, assumindo valor 0 caso o retorno seja negativo e 1 caso seja positivo
+
+```{r}
+df_ibov_retornos <- df_ibov_retornos %>%
+  mutate(Retornos = ifelse(Retornos > 0,1,0))
+df_ibov_retornos
+```
+
+# SUA PARTE
+
+De acordo com o que você viu nas aulas de regressão logística, aplique o conhecimento para gerar a martiz de confusão!
+
+
+# Crie o modelo
+
+Não se esqueça de usar a função train()
+
+```{r}
+
+```
+
+# Faça a previsão com o modelo
+
+Não se esqueça de usar a função predict()
+
+```{r}
+
+```
+
+# Retorne a matriz de confusão
+
+Não se esqueça de usar a função table()
+
+```{r}
+
+```
+
+
+# Calcule a acurácia do seu modelo!
+
+Total de casos certos/Total de casos
+
+```{r}
+
+```
+
+
+

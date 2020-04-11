@@ -1,0 +1,446 @@
+---
+title: "R para Economia"
+author: "Lucas Mendes"
+date: "24/03/2020"
+output: 
+  beamer_presentation:
+    theme: "AnnArbor"
+    colortheme: "dolphin"
+    fonttheme: "structurebold"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T,
+                      include = T,
+                      warning = F,
+                      message = F)
+library(tidyverse)
+setwd("/cloud/project")
+```
+
+
+# Pacotes
+
+## Pacotes 
+
+Muitos programadores criam funções com finalidades especificas, como para visualização de dados,modelagem, manipulação de dados e etc. Essas funções ficam armazenadas no que chamamos de pacote. A maioria dos pacotes fica armazenda no [CRAN](https://cran.r-project.org/). Já outros ficam armazenadas no github pessoal do desenvolvedor do pacote
+
+O R já vem instalado com alguns pacotes básicos, mas na maioria das vezes temos que baixa - los. Para isso uitlizamos a função:
+
+- `install.packages("nome do pacote")`
+
+Esse comando, baixa o pacote e instala - o na sua máquina. Porém para ativar as suas funcionalidades usamos o comando:
+
+- `library(nome do pacote)`
+
+## Pacotes
+
+Iremos agora instalar e carregar o pacote tidyverse
+
+O pacote `tidyverse` fez uma verdadeira revolução na linguagem. Ele usa principios da filosofia tidy para organização dos dados. Ele mesmo não é um pacote em si, mas sim um agrupamento de diversos pacotes que utilizam a filosofia tidy como o dplyr, tidyr, ggplot2, purrr e outros que veremos mais a frente.
+
+Caso você queira saber mais, é só clicar nesse [link para o site do tidyverse](https://www.tidyverse.org/)
+
+## Tidyverse
+
+![](/cloud/project/image/tidy.jpg)
+
+
+
+
+## Importação/Exportação de dados
+
+Neste capítulo iremos estudar como importar e exportar arquivos com extensões:
+
+- CSV
+- XLSX (Excel)
+
+Praticamente tudo é parecido, mudam - se pequenos detalhes.
+
+## Definindo diretório de trabalho
+
+O diretório de trabalho é o *caminho* onde o R irá importar e exportar os arquivos. 
+
+Para defini - lo, podemos usar a função:
+
+- `setwd("C:/cloud/project/cursoR)`.
+
+Para ver em qual diretório de trabalho está localizado atualmente, podemos usar a função: 
+
+- `getwd()`
+
+
+## Importando/Exportando csv {.smaller}
+
+**CSV** é uma extensão na qual as colunas são separadas por vírgulas (caso americano) e ponto e vírgula (caso brasileiro). Normalmente ele é aberto no excel e parece com uma planilha.
+
+Para importar um csv usamos a função `read.csv()`
+
+```{r echo=TRUE}
+# Importando
+df1 <- read.csv("dados/iris.csv",
+                header = T,
+                sep = ",")
+
+```
+
+## Importando/Exportando csv {.smaller}
+
+Visualizando as primeiras linhas
+
+```{r}
+head(df1)
+```
+
+
+## Importando/Exportando csv {.smaller}
+
+Para exportar um data frame para um arquivo csv, utilizamos a função `write.csv()`
+
+```{r eval=FALSE, include=TRUE}
+# Exportando
+write.csv(df1,"dados/petalas.csv")
+```
+
+## Excel
+
+Não há função nativa para importar ou exportar arquivos em excel. Para isso há diversos `pacotes` disponiveis para tal. Eu irei demonstrar com o `xlsx`
+
+```{r eval=FALSE, include=TRUE}
+# Carragando o pacote
+library(xlsx)
+
+# Importando dados
+df1 <- read.xlsx('dados/arquivo1.xlsx',sheetIndex = 1)
+
+# Exportando dados
+write.xlsx(df1,"dados/arquivo.xlsx")
+```
+
+## Funções rápidas
+
+A maioria dos dados que importamos no R são csv. E existem duas funções de outros pacotes que lidam melhor com dados maiores (> 10 MB). Em ordem de velocidade:
+
+Do pacote `readr` a função `read_csv()`
+
+Do pacote `data.table` a função `fread()`
+
+Do pacote `vroom` a função `vroom()`
+
+Para saber mais sobre qualquer outra função, experimente colocar o `?` na frente do nome da função e rode a linha. (Exercicio)
+
+# Exercicios
+
+# Introdução a manipulação de dados
+
+
+## Manipulação de dados
+
+Para manipular dados, iremos utilizar extensivamente os pacotes `dplyr` e `tidyr`.
+
+## dplyr
+
+O dplyr tem diversas funções para que possamos arranjar nossos dados da melhor forma, porém iremos destacar as seguintes:
+
+- select
+- filter
+- group_by
+- summarise
+- arrange
+- mutate
+
+E a melhor parte é o uso do pipe `%>%`, que irá fazer nosso código virar uma receita de bolo.
+
+## Um pouco mais sobre o pipe %>%
+
+O pipe é um operador que liga as funções, ou seja, você não precisa ficar mais escrevendo uma função dentro da outra.
+
+
+Exemplo: Se quisessemos calcular a raiz quadrada do log de 4 elevado a 3?
+
+Jeito normal
+```{r}
+sqrt(log(4**3))
+```
+
+Com pipe
+```{r}
+4**3 %>% log() %>% sqrt()
+```
+
+# dplyr
+
+## Exemplo de caso {.smaller}
+
+Imagine que você esteja trabalhando em uma grande varejista e o seu chefe te pede uma tabela de resumo de vendas por país excluindo os EUA por ordem descrescente. Dado que sua tabela tem essas colunas
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+df1 <- read_csv("dados/sales.csv")[,-1]
+
+names(df1)
+
+```
+
+# Função select
+
+## Selecionando colunas necessárias
+
+Quais colunas seriam necessárias para fazer isso?
+
+- Quantidade
+- Preço
+- País
+
+Para selecionar essas colunas, usaremos a função `select()` do dplyr.
+
+```{r message=FALSE, warning=FALSE}
+library(dplyr)
+
+df2 <- df1 %>%
+  select(QUANTITYORDERED,PRICEEACH,COUNTRY)
+```
+
+## Selecionando colunas necessárias
+
+```{r}
+head(df2)
+```
+
+# Função filter
+
+## Filtrando o País
+
+Como nosso patrão não quer os EUA, iremos filtrá - lo, usando a função filter() do dplyr
+
+```{r}
+df2 <- df2 %>%
+  filter(COUNTRY != "USA")
+```
+
+## Filtrando o País
+
+```{r}
+head(df2) 
+```
+
+# Função mutate
+
+## Calculando receita total por produto
+
+Como se calcula receita? É só multiplicar a quantidade vendida pelo preço unitário, criando assim uma nova coluna chamada `Revenue`. Criaremos a coluna Revenue usando a função `mutate()` do dplyr
+
+```{r}
+df2 <- df2 %>%
+  mutate(Revenue = QUANTITYORDERED * PRICEEACH)
+```
+
+## Calculando receita total por produto
+
+```{r}
+head(df2)
+```
+
+# Função group_by e summarize
+
+## Como agrupar e sumarizar os dados 
+
+Agora queremos um resumo da receita total por país. Para isso teremos de agrupar nossos dados por país e somar a receita deles. Para isso usaremos a função `group_by()` e `summarize()` do pacote dplyr.
+
+
+```{r}
+df2 <- df2 %>% 
+  group_by(COUNTRY) %>%
+  summarise(Total_Revenue = sum(Revenue))
+```
+
+## Como agrupar e sumarizar os dados 
+
+```{r}
+head(df2)
+```
+
+# Função arrange
+
+## Como ordenar os dados?
+
+Lembre que queremos as maiores receitas por país? Agora iremos ordenar a nossa tabela por ordem descrescente de receita, para isso usaremos a função arrange()
+
+```{r}
+df2 <- df2 %>% arrange(desc(Total_Revenue))
+```
+
+## Como ordenar os dados?
+
+```{r}
+head(df2)
+```
+
+# Função count
+
+## Função count()
+
+Outra função muito importante é a função `count()`. Ela conta variáveis não númericas, normalmente caracteres ou factors. Imagine que queremos saber qual cliente mais aparece na nossa base de dados?
+
+```{r}
+df1 %>% select(CUSTOMERNAME) %>% head()
+```
+
+## Função count()
+
+```{r}
+df3 <- df1 %>% count(CUSTOMERNAME) %>% arrange(desc(n))
+head(df3)
+```
+
+# Função slice
+
+## Fatiando o data frame {.smaller}
+
+Imagine que queiramos saber apenas os 8 clientes que mais aparecem? para isso podemos usar a função `slice()`
+
+```{r}
+df3 <- df3 %>% slice(1:8)
+df3
+```
+
+# Exercicios
+
+# tidyr
+
+## tidyr
+
+O pacote tidyr é usado para fazer reshape dos dados. As principais funções utilizadas são:
+
+- gather
+- spread
+- unite
+- separate
+
+# gather
+
+## gather
+
+A função gather transforma um data frame do formato wide em um data frame no formato long.
+
+
+
+```{r include=FALSE}
+df_long <- data.frame(Ano = c(2008,2009,2010,2011,2012),
+                 Receita = runif(5,1000,3000),
+                 Despesa = runif(5,1000,3000))
+```
+
+```{r}
+df_long 
+```
+
+## Função gather
+
+```{r eval=FALSE, include=T}
+df_gather <- df %>% gather(Indicadores,Valores,-Ano)
+```
+
+## Função gather
+
+```{r echo=FALSE}
+df_gather <- df_long %>% gather(Indicadores,Valores,-Ano)
+df_gather
+```
+
+
+
+# spread
+
+## spread
+
+A função `spread` faz exatamente o contrario da `gather`. Ela transforma um data frame do tipo long em um wide
+
+```{r eval=FALSE, include=TRUE}
+df_gather %>% spread(Indicadores,Valores)
+```
+
+## spread
+
+```{r echo=FALSE}
+df_gather %>% spread(Indicadores,Valores)
+```
+
+# Resumindo
+
+## Resumindo
+
+![](/cloud/project/image/tidyr.png)
+
+# Exercicios
+
+# Manipulando datas
+
+## Manipulando datas {.smaller}
+
+Datas eram muitas vezes uma dor de cabeça, ja que elas vem normalmente em diversos formatos e querem dizer a mesma coisa:
+
+- 02/01/2009
+- 2/1/2009
+- 2009-2-1
+- 1-fev-2009
+
+
+Para isso, temos o pacote lubridate, que resolve esses problemas de formatação e outras coisas mais.
+
+```{r warning=FALSE}
+library(lubridate)
+```
+
+Lembrando que o R só aceita um formato de data, que é no estilo yyyy-mm-dd
+
+## Manipulando datas {.smaller}
+
+```{r}
+data_1 <- "2009-02-02"
+class(data_1)
+```
+
+Se notarmos, o código acima nos retorna um objeto do tipo `character` e nós queremos um objeto do tipo `date`. Logo usamos a função `as.Date`
+
+```{r}
+data_1 %>% as.Date() %>% class()
+```
+
+## Manipulando datas {.smaller}
+
+Se tentarmos fazer o procedimento com uma data não formatada, irá nos retormar uma data errada.
+
+```{r}
+data_1 <- "02/02/2009"
+data_1 %>% as.Date()
+```
+
+Para isso não acontecer, usaremos a função do lubridate de acordo com o formato da data
+
+```{r}
+data_1 %>% dmy()
+```
+
+## Manipulando datas {.smaller}
+
+Com outra formatação
+
+```{r}
+data_2 <- "2009,2,2"
+data_2 %>% ymd()
+```
+
+
+## Manipulando datas {.smaller}
+
+Geralmente você irá usar uma dessas funções:
+
+- ymd para datas no estilo yyyy-mm-dd
+- dmy para datas no estilo dd-mm-yyyy
+- mdy para datas no estilo mm-dd-yyyy
+
+Para saber mais sobre manipualção de datas, recomendo a leitura do pacote [**aqui**](https://cran.r-project.org/web/packages/lubridate/vignettes/lubridate.html)
+
+# Exercicios
+
+

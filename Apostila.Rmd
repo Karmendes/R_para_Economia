@@ -1,0 +1,2044 @@
+---
+title: "Apostila de R para Economia"
+author: "Lucas Mendes"
+date: "11/04/2020"
+output: 
+  html_document:
+    code_folding: show
+    number_section: True
+    toc: True
+    toc_float: True
+    
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T,
+                      include = T,
+                      warning = F,
+                      message = F)
+library(tidyverse)
+```
+
+
+# O que veremos nesse curso
+
+## Sumário
+
+>- Introdução ao R 
+>- Manipulação de dados 
+>- Visualização de dados
+>- Regressão Linear e Logística
+>- Séries Temporais
+>- Relatórios
+
+## Avisos
+
+>- R não é excel
+>- Em um primeiro momento pode não fazer sentido
+>- Você vai errar muito
+>- Muito mesmo
+>- Busque Ajuda
+
+## Quem irá te ajudar?
+
+>- Karmendes
+>- Se a aula for presencial, seu colega ao lado
+>- [**Stackoverflow**](https://stackoverflow.com/)
+>- Páginas aleatórias do google sobre R
+>- Blogs de R
+>- [A bíblia do R](https://r4ds.had.co.nz/)
+
+
+
+# Layout do Rstudio 
+
+## Console
+
+![](/cloud/project/image/layout1.png)
+
+Nesse painel, na qual chamamos de console, será mostrado o output de qualquer código que nós rodarmos. 
+
+Aqui também pode se escrever código, mas não é recomendável para produção de scripts.
+
+## Editor de Texto
+
+![](/cloud/project/image/layout2.png)
+
+O chamado editor de texto, será onde escreveremos nossos códigos (scripts). Há dois tipos de arquivo que esse editor de texto irá gerar. Os que chamamos de .R, na qual é pagina em branco onde tudo escrito nele é código e o .Rmd, que é híbrido, onde podemos escrever código dentro dos chamados **chuncks** e fora dele é texto comum, igual o que você está lendo agora.
+
+## Files,Plots,Packages
+
+![](/cloud/project/image/layout3.png)
+
+Nesse painel, há algumas abas que iremos utilizar.
+
+A aba **Files**: Irá nos dizer de onde o R está importando e exportando arquivos
+
+A aba **Plots**: Irá nos mostrar os gráficos que produzirmos
+
+A aba **Packages**: Irá nos mostrar quais pacotes temos instalados na nossa maquina e quais estão carregados
+
+A aba **Help**: Irá nos mostrar a documentação das funções na qual podemos chamar usando `?nome_da_função`
+
+A aba **Viewe**: Irá nos mostrar imagens interativas como mapas e gráficos
+
+
+## Enviroment,History,Connetions
+
+![](/cloud/project/image/layout4.png)
+
+A aba **enviroment**: Irá nos mostrar as variáveis que criamos no editor de texto
+A aba **history**: Irá nos mostrar os últimos códigos que rodamos
+A aba **Connections**: Irá demonstrar as conexões em andamento
+
+
+# Disclaimer
+
+
+Nós temos que diferenciar duas coisas nesse curso: 
+
+Variáveis != Objetos
+
+Variável = Serve para armazenar objetos.
+Objeto = Coisas que manipulamos no R (Vetor, Matriz, Tabelas, Gráficos...)
+
+Regra da criação de variáveis
+
+1° Não começa com Números: **1x** não é possivel. **x1** sim
+
+2° Há palavras que não podem se tornar variaveis: **TRUE** e **FALSE** por exemplo.
+
+3° Há diferenciação de minúscula para maiúscula: **X** != **x**
+
+
+# Introdução ao R
+
+## Operadores 
+
+### Operadores 
+
+Nós iremos abordar dois tipos de operadores:
+
+>- Os operadores de atribuição
+>- Os operadores relacionais
+
+>- **Operadores de atribuição**: Atribuem um valor ou objeto a uma variável
+>- **Operadores relacionais**: Perguntam se dada  afirmação é *Falsa* ou *Verdadeira*
+
+
+### Operador de atribuição
+
+Podemos usar tanto o sinal `=` como o `<-`, sendo mais comum o último.
+
+
+#### Exemplo 1
+
+```{r}
+x = 10
+```
+
+#### Exemplo 2
+```{r}
+x <- 12
+```
+
+### O que está ocorrendo
+
+Quando você roda uma linha de código, como :
+
+```{r}
+x <- 10
+```
+
+O que acontece é que o computador aloca na memoria dele um espaço para armazenar a variavel `x` que consequentemente tem o valor 10.
+
+Se você passar qualquer outro valor para `x` e rodar o código, o computador ira tirar da memória o valor anterior e gravar o novo.
+
+### Em imagens
+
+#### Gravando uma variavel
+
+![](/cloud/project/image/image1.png)
+
+Iniciada a sessão no R.
+
+#### Gravando uma variavel
+
+![](/cloud/project/image/image2.png)
+
+No seu editor de texto, você digita o código `X <- log(10)` e roda o código.
+
+#### Gravando uma variavel
+
+![](/cloud/project/image/image4.png)
+
+O seu computador irá alocar na memória, um espaço dizendo que a variavel `X` armazena o valor do log(10)
+
+#### Gravando uma variavel
+
+![](/cloud/project/image/image5.png)
+
+Caso você queira ver o valor da variavel X, você roda no seu editor de texto a função `print(X)` que te trará o output 2.3 no seu console
+
+### Modo Errado
+
+#### Gravando uma variavel
+
+![](/cloud/project/image/image6.png)
+
+Desse modo, o computador está realizando a função e te mostrando o resultado, porém ele não armazena em nenhum lugar.
+
+#### Gravando uma variavel
+
+![](/cloud/project/image/image7.png)
+
+Caso você se engane e queira realizar um outro procedimento com a variavel `X`, o R irá te retornar Erro.
+
+### Gravando um valor em cima
+
+#### Gravando uma variavel
+
+![](/cloud/project/image/image8.png)
+
+Nesse caso, se você realizou o procedimento correto anterior, `X` armazenava log(10).
+
+Como agora você está passando para `X` o valor de log(8), o computador irá jogar para fora o antigo valor e colocar o novo.
+
+#### Gravando uma variavel
+
+O computador lê uma sequencia de comandos
+
+>- Portanto, fica armazenada na memória a última linha rodada.
+
+### Operador Lógico
+
+Há uma pequena lista bem intuitiva de operadores lógicos que iremos destrinchar, mas para resumir: Esses operadores fazem perguntas na qual são respondidas com **True** ou **False**
+
+>- Operador de **Maior que**: `>`
+>- Operador de **Menor que**: `<`
+>- Operador de **Maior igual**: `>=`
+>- Operador de **Menor igual**: `<=`
+>- Operador **Igual a **: `==`
+>- Operador **Diferente de**: `!=`
+
+#### Exemplos
+
+```{r}
+# Inicializando valores nas variaveis
+a <- 2
+b <- 3
+```
+
+```{r}
+# Maior que
+a > b
+```
+
+```{r}
+# Menor que
+a < b
+```
+
+```{r}
+# Maior Igual que
+a >= b
+```
+
+```{r}
+# Menor igual que
+a <= b
+```
+
+```{r}
+# Igual que
+a == b
+```
+
+```{r}
+# Diferente de
+a != b
+```
+
+## Objetos Atômicos
+
+### Objetos Atômicos
+
+O R possui muitos objetos atômicos. Nós iremos ver agora os **4 principais**:
+
+>- Numerics (Double)
+>- Inteiros (Double)
+>- Caracters (Characters)
+>- Lógicos (Booleanos,Binários)
+
+### Numerics
+
+Os objetos `Numerics` representam números,obviamente.
+
+Qualquer número que você digite no R, vai ser da **Classe** dos númericos previamente
+
+```{r}
+# Criando objeto atômico numérico
+x <- 5.3
+
+# Observando sua classe
+class(x)
+```
+
+### Funções
+
+Como você viu no ultimo slide, o R é feito de funções, no caso usamos a função `class()`. 
+
+Todas as funções no R possuem esse formato
+
+`nome_da_função(param1,param2,param3,...)`
+
+As vezes a função tem apenas 1 parâmetro obrigatório e outros são opcionais
+
+Caso você queria ver como usar a função, rode no seu console `?nome_da_função`
+
+
+
+### Inteiros
+
+Explicando péssimamente os objetos inteiros são como fosse objetos `Numerics`, só que **arredondados**.
+
+Como todos os números que botamos no R são da classe `Numeric` previamente, temos que usar a função `as.intenger()` para transformar um objeto em `inteiro`
+
+```{r}
+z <- 4.3
+class(z)
+# Transformando
+z <- as.integer(z)
+z
+```
+
+### Caracter {.smaller}
+
+Os objetos `caracter` representam um texto no R.
+
+Textos são normalmente formados por letras, porém números também podem aparecer.
+
+`caracter` é caracterizado pelo uso de **aspas** ('') envolvendo - os
+
+```{r}
+t <- 'd'
+class(t)
+```
+
+Observe que o código abaixo produz um `caracter` e não um `numeric`, pelo uso das aspas
+
+```{r}
+w <- '2'
+class(w)
+```
+
+### Lógicos
+
+Objetos do tipo `lógicos` são objetos que retornam `TRUE` ou `FALSE` como vimos anteriormente.
+
+
+```{r}
+t <- TRUE
+f <- FALSE
+```
+
+```{r}
+class(t)
+
+```
+
+```{r}
+class(f)
+```
+
+
+## Vetores
+
+### Vetores
+
+Vetor é um dos objetos mais importantes no R. Ele é a base para a construção dos outros 2 objetos que iremos estudar. 
+
+Caracteristicas de um vetor:
+
+>- O vetor é um objeto unidimensional
+>- O vetor só aceita uma classe de objetos atômicos
+>- A classe dos elementos que compôe o vetor é a classe do mesmo
+>- A função `c()` cria um vetor
+
+### Criando um vetor de caracteres
+
+```{r}
+# Criando
+v1 <- c("MC","Kevin","o","Chris")
+print(v1)
+```
+
+```{r}
+# Verificando a classe
+class(v1)
+```
+
+### Criando um vetor de numerics
+
+
+```{r}
+# Criando
+v2 <- c(1,2,3,4)
+print(v2)
+```
+
+```{r}
+# Verificando a classe
+class(v2)
+```
+
+### Combinando Vetores
+
+Podemos combinar dois vetores em um
+
+```{r}
+# Vetores
+v1 <- c("MC","Kevin","o","Chris")
+v2 <- c(1,2,3,4)
+
+# Combinando 
+
+v3 <- c(v1,v2)
+print(v3)
+```
+
+### Dominancia de classes
+
+Caracter > Numeric > Inteiro > Lógico
+
+Ou seja, se formos combinar vetores de classes diferentes, o novo vetor será da classe do mais a esquerda na sequencia acima
+
+### Operações com vetores
+
+Podemos fazer operações básicas com os vetores
+
+```{r}
+a <- c(1,2)
+b <- c(3,4)
+```
+
+```{r}
+# Subtração
+a - b
+```
+
+### Operações com vetores {.smaller}
+
+```{r}
+# Soma
+a + b
+```
+
+```{r}
+# Divisão
+a / b
+```
+
+```{r}
+# Multiplicação
+a * b
+```
+
+```{r}
+# Potenciação
+a^b
+```
+
+### E se os vetores tiverem tamanhos diferentes?
+
+```{r}
+a <- c(1,2)
+b <- c(3,4,5,6)
+```
+
+```{r}
+# Soma
+a + b
+```
+
+>- Sim, repete - se o vetor menor até o fim do vetor maior
+
+>- Essa operação se dá o nome de **Reciclagem**
+
+### Mas e se os tamanhos não forem múltiplos?
+
+```{r}
+a <- c(1,2)
+b <- c(3,4,5,6,7)
+```
+
+```{r}
+# Soma
+a + b
+```
+
+>- A mesma coisa acontece, só que o vetor menor não irá ser somado todos os seus elementos na ultima repetição
+
+
+## Matriz
+
+### Matriz
+
+Matrizes são muito similares aos vetores, a única diferença é que são objetos bidimensionais.
+
+Um vetor poderia ser composto por uma linha ou uma coluna.
+
+Já matrizes são compostas obrigatóriamente por linhas e colunas
+
+resumindo:
+
+>- A matriz é um objeto composto por linhas e colunas
+>- Ela só aceita uma classe de objetos atômicos
+>- A classe dos elementos que compôe a matriz é a classe da mesma
+>- A função `matrix()` cria uma matriz
+>- Para preencher uma matriz você terá que passar um vetor dentro dela 
+>- **This way**: `matrix(c())`
+
+### Criando uma matriz com 4 elementos
+
+```{r}
+matrix(c(1,2,3,4))
+```
+
+>- O padrão de uma matriz é ser preenchida por coluna
+>- Podemos especificar quantas colunas queremos em uma matriz com o parâmetro `nc`
+>- Podemos fazer o mesmo procedimento so que por linhas com o parâmetro `nr`
+
+### Criando uma matriz de 4 elementos e 2 colunas
+
+```{r}
+matrix(c(1,2,3,4),nc = 2)
+```
+
+### Criando uma matriz de 4 elementos e 4 linhas
+
+```{r}
+matrix(c(1,2,3,4),nr = 4)
+```
+
+
+
+### Criando uma matriz de 4 elementos preenchida por linha
+
+Para preencher uma matriz por linha, podemos usar o parâmetro `byrow = TRUE`
+
+```{r}
+matrix(c(1,2,3,4),
+       nc = 2,
+       byrow = TRUE)
+```
+
+
+## Data Frames
+
+### O que são Data Frames
+
+Data frames são como matrizes, porém não possuem restriçoes de classe.
+
+São os objetos que se parecem com planilhas ou tabelas do excel
+
+Resumindo:
+
+>- Um Data Frame é um objeto composto por linhas e colunas
+>- Ela aceita mais de uma classe de objetos atômicos
+>- A classe do objeto data frame é data.frame
+>- A função `data.frame()` cria uma data frame
+>- Para criar as colunas de um data frame você terá que passar um vetor 
+>- **This way**: `data.frame(Alunos = c(),Escola = c())`
+
+### Criando um Data frame
+
+
+```{r}
+# Criando Data Frame
+df1 <- data.frame(Times = c("Flamengo","Palmeiras"),
+                 Libertadores = c(2,1),
+                 Mundial = c(TRUE,FALSE))
+```
+
+```{r echo=FALSE}
+df1
+```
+
+### Funções com data frames
+
+#### Informações sobre dataframes
+
+```{r}
+# Informações
+str(df1)
+```
+
+#### N° Colunas
+
+```{r}
+# N° Colunas
+ncol(df1)
+```
+
+#### N° Linhas
+
+```{r}
+# N° Linhas
+nrow(df1)
+```
+
+
+#### head
+
+```{r}
+# Observando as primeiras 6 linhas
+head(mtcars)
+```
+
+#### tail 
+
+```{r}
+# Observando as ultimas 6 linhas
+tail(mtcars)
+```
+
+#### Nome das colunas 
+
+```{r}
+# Nome das colunas
+names(df1)
+```
+
+```{r}
+# Renomeando as colunas
+names(df1) <- c("Clube","Libertadores","Tem_Mundial")
+```
+
+```{r echo=FALSE}
+df1
+```
+
+## Listas
+
+### O que é um Lista
+
+Listas são um dos objetos mais complexos do R. Em um primeiro momento ele pode confundir, mas não passa de um vetor ampliado.
+
+Resumindo:
+
+>- Listas armazenam qualquer objeto nelas mesmas (vetores,data frames,matrizes,listas)
+
+>- Elas são dividas pelo que chamamos de nós
+
+>- Para criar uma lista nós chamamos a função `list()`
+
+#### Exemplo
+
+
+```{r include=TRUE,echo=TRUE}
+x1 <- list(c(1, 2), c(3, 4))
+x2 <- list(list(1, 2), list(3, 4))
+x3 <- list(1, list(2, list(3)))
+```
+
+#### Estrutura de uma lista
+
+![](/cloud/project/image/list.png)
+
+### Exemplos
+
+#### Exemplo de lista não nomeada
+
+Criando uma lista com matriz e data frame
+
+```{r }
+
+df <- data.frame(coluna1 = c(1,2,3,4),
+                 coluna2 = c(42,5,2,5))
+m1 <- matrix(c(1:8),nc = 2)
+
+list1 <- list(df, # 1° Nó
+              m1) # 2° Nó
+               
+
+```
+
+
+### Exemplo de lista nomeada
+
+Vetor e data frame
+
+```{r eval=FALSE}
+
+df1 <- data.frame(x = c("Start","End"),
+                  y = c(FALSE,TRUE))
+v1 <- c(1,2,3,4,5)
+
+list2 <- list(primeiro = df1,
+              segundo = v1)
+
+```
+
+### Onde estudar listas?
+
+Acesse [aqui](https://r4ds.had.co.nz/vectors.html#lists)
+
+O exemplo acima foi tirado de lá.
+
+# Manipulação de dados
+
+## Pacotes
+
+### O que são Pacotes 
+
+Muitos programadores criam funções com finalidades especificas, como para visualização de dados,modelagem, manipulação de dados e etc. Essas funções ficam armazenadas no que chamamos de pacote. A maioria dos pacotes fica armazenda no [CRAN](https://cran.r-project.org/). Já outros ficam armazenadas no github pessoal do desenvolvedor do pacote
+
+O R já vem instalado com alguns pacotes básicos, mas na maioria das vezes temos que baixa - los. Para isso uitlizamos a função:
+
+- `install.packages("nome do pacote")`
+
+Esse comando, baixa o pacote e instala - o na sua máquina. Porém para ativar as suas funcionalidades usamos o comando:
+
+- `library(nome do pacote)`
+
+Iremos agora instalar e carregar o pacote tidyverse
+
+O pacote `tidyverse` fez uma verdadeira revolução na linguagem. Ele usa principios da filosofia tidy para organização dos dados. Ele mesmo não é um pacote em si, mas sim um agrupamento de diversos pacotes que utilizam a filosofia tidy como o dplyr, tidyr, ggplot2, purrr e outros que veremos mais a frente.
+
+Caso você queira saber mais, é só clicar nesse [link para o site do tidyverse](https://www.tidyverse.org/)
+
+### Tidyverse
+
+![](/cloud/project/image/tidy.jpg)
+
+
+
+
+## Importação/Exportação de dados
+
+Neste capítulo iremos estudar como importar e exportar arquivos com extensões:
+
+- CSV
+- XLSX (Excel)
+
+Praticamente tudo é parecido, mudam - se pequenos detalhes.
+
+### Definindo diretório de trabalho
+
+O diretório de trabalho é o *caminho* onde o R irá importar e exportar os arquivos. 
+
+Para defini - lo, podemos usar a função:
+
+- `setwd("C:/cloud/project/cursoR)`.
+
+Para ver em qual diretório de trabalho está localizado atualmente, podemos usar a função: 
+
+- `getwd()`
+
+
+### Importando/Exportando csv {.smaller}
+
+**CSV** é uma extensão na qual as colunas são separadas por vírgulas (caso americano) e ponto e vírgula (caso brasileiro). Normalmente ele é aberto no excel e parece com uma planilha.
+
+Para importar um csv usamos a função `read.csv()`
+
+```{r echo=TRUE}
+# Importando
+df1 <- read.csv("/cloud/project/Aula_2/dados/iris.csv",
+                header = T,
+                sep = ",")
+
+```
+
+Visualizando as primeiras linhas
+
+```{r}
+head(df1)
+```
+
+
+Para exportar um data frame para um arquivo csv, utilizamos a função `write.csv()`
+
+```{r eval=FALSE, include=TRUE}
+# Exportando
+write.csv(df1,"dados/petalas.csv")
+```
+
+### Excel
+
+Não há função nativa para importar ou exportar arquivos em excel. Para isso há diversos `pacotes` disponiveis para tal. Eu irei demonstrar com o `xlsx`
+
+```{r eval=FALSE, include=TRUE}
+# Carragando o pacote
+library(xlsx)
+
+# Importando dados
+df1 <- read.xlsx('dados/arquivo1.xlsx',sheetIndex = 1)
+
+# Exportando dados
+write.xlsx(df1,"dados/arquivo.xlsx")
+```
+
+### Funções rápidas
+
+A maioria dos dados que importamos no R são csv. E existem duas funções de outros pacotes que lidam melhor com dados maiores (> 10 MB). Em ordem de velocidade:
+
+Do pacote `readr` a função `read_csv()`
+
+Do pacote `data.table` a função `fread()`
+
+Do pacote `vroom` a função `vroom()`
+
+Para saber mais sobre qualquer outra função, experimente colocar o `?` na frente do nome da função e rode a linha. (Exercicio)
+
+
+## dplyr
+
+O dplyr tem diversas funções para que possamos arranjar nossos dados da melhor forma, porém iremos destacar as seguintes:
+
+- select
+- filter
+- group_by
+- summarise
+- arrange
+- mutate
+
+E a melhor parte é o uso do pipe `%>%`, que irá fazer nosso código virar uma receita de bolo.
+
+### Um pouco mais sobre o pipe %>%
+
+O pipe é um operador que liga as funções, ou seja, você não precisa ficar mais escrevendo uma função dentro da outra.
+
+
+Exemplo: Se quisessemos calcular a raiz quadrada do log de 4 elevado a 3?
+
+Jeito normal
+```{r}
+sqrt(log(4**3))
+```
+
+Com pipe
+```{r}
+4**3 %>% log() %>% sqrt()
+```
+
+Imagine que você esteja trabalhando em uma grande varejista e o seu chefe te pede uma tabela de resumo de vendas por país excluindo os EUA por ordem descrescente. Dado que sua tabela tem essas colunas
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+df1 <- read_csv("/cloud/project/Aula_2/dados/sales.csv")[,-1]
+
+names(df1)
+
+```
+
+### Função select
+
+#### Selecionando colunas necessárias
+
+Quais colunas seriam necessárias para fazer isso?
+
+- Quantidade
+- Preço
+- País
+
+Para selecionar essas colunas, usaremos a função `select()` do dplyr.
+
+```{r message=FALSE, warning=FALSE}
+library(dplyr)
+
+df2 <- df1 %>%
+  select(QUANTITYORDERED,PRICEEACH,COUNTRY)
+
+head(df2)
+```
+
+### Função filter
+
+#### Filtrando o País
+
+Como nosso patrão não quer os EUA, iremos filtrá - lo, usando a função filter() do dplyr
+
+```{r}
+df2 <- df2 %>%
+  filter(COUNTRY != "USA")
+
+head(df2) 
+```
+
+### Função mutate
+
+#### Calculando receita total por produto
+
+Como se calcula receita? É só multiplicar a quantidade vendida pelo preço unitário, criando assim uma nova coluna chamada `Revenue`. Criaremos a coluna Revenue usando a função `mutate()` do dplyr
+
+```{r}
+df2 <- df2 %>%
+  mutate(Revenue = QUANTITYORDERED * PRICEEACH)
+
+head(df2)
+```
+
+### Função group_by e summarize
+
+#### Como agrupar e sumarizar os dados 
+
+Agora queremos um resumo da receita total por país. Para isso teremos de agrupar nossos dados por país e somar a receita deles. Para isso usaremos a função `group_by()` e `summarize()` do pacote dplyr.
+
+
+```{r}
+df2 <- df2 %>% 
+  group_by(COUNTRY) %>%
+  summarise(Total_Revenue = sum(Revenue))
+head(df2)
+```
+
+### Função arrange
+
+#### Como ordenar os dados?
+
+Lembre que queremos as maiores receitas por país? Agora iremos ordenar a nossa tabela por ordem descrescente de receita, para isso usaremos a função arrange()
+
+```{r}
+df2 <- df2 %>% arrange(desc(Total_Revenue))
+head(df2)
+```
+
+### Função count
+
+#### Função count()
+
+Outra função muito importante é a função `count()`. Ela conta variáveis não númericas, normalmente caracteres ou factors. Imagine que queremos saber qual cliente mais aparece na nossa base de dados?
+
+```{r}
+df1 %>% select(CUSTOMERNAME) %>% head()
+df3 <- df1 %>% count(CUSTOMERNAME) %>% arrange(desc(n))
+head(df3)
+```
+
+### Função slice
+
+#### Fatiando o data frame {.smaller}
+
+Imagine que queiramos saber apenas os 8 clientes que mais aparecem? para isso podemos usar a função `slice()`
+
+```{r}
+df3 <- df3 %>% slice(1:8)
+df3
+```
+
+
+## tidyr
+
+O pacote tidyr é usado para fazer reshape dos dados. As principais funções utilizadas são:
+
+- gather
+- spread
+- unite
+- separate
+
+### gather
+
+A função gather transforma um data frame do formato wide em um data frame no formato long.
+
+
+
+```{r include=FALSE}
+df_long <- data.frame(Ano = c(2008,2009,2010,2011,2012),
+                 Receita = runif(5,1000,3000),
+                 Despesa = runif(5,1000,3000))
+```
+
+Observe esse data frame
+
+```{r}
+df_long 
+```
+
+Aplicando a função `gather`
+
+```{r eval=FALSE, include=T}
+df_gather <- df %>% gather(Indicadores,Valores,-Ano)
+```
+
+Observe que as colunas foram encaixotadas em uma coluna chamada de **Indicadores** e os seus respectivos valores em outra coluna chamada de **Valores**.
+
+```{r echo=FALSE}
+df_gather <- df_long %>% gather(Indicadores,Valores,-Ano)
+df_gather
+```
+
+
+### spread
+
+A função `spread` faz exatamente o contrario da `gather`. Ela transforma um data frame do tipo long em um wide
+
+```{r eval=FALSE, include=TRUE}
+df_gather %>% spread(Indicadores,Valores)
+```
+
+Observe que temos o data frame original novamente. Digamos que essa função abre uma coluna, criando novas colunas nominadas pelos valores antigos da coluna aberta.
+
+```{r echo=FALSE}
+df_gather %>% spread(Indicadores,Valores)
+```
+
+
+## Resumindo
+
+![](/cloud/project/image/tidyr.png)
+
+
+
+## Manipulando datas
+
+Datas eram muitas vezes uma dor de cabeça, ja que elas vem normalmente em diversos formatos e querem dizer a mesma coisa:
+
+- 02/01/2009
+- 2/1/2009
+- 2009-2-1
+- 1-fev-2009
+
+
+Para isso, temos o pacote lubridate, que resolve esses problemas de formatação e outras coisas mais.
+
+```{r warning=FALSE}
+library(lubridate)
+```
+
+Lembrando que o R só aceita um formato de data, que é no estilo yyyy-mm-dd
+
+
+```{r}
+data_1 <- "2009-02-02"
+class(data_1)
+```
+
+Se notarmos, o código acima nos retorna um objeto do tipo `character` e nós queremos um objeto do tipo `date`. Logo usamos a função `as.Date`
+
+```{r}
+data_1 %>% as.Date() %>% class()
+```
+
+
+Se tentarmos fazer o procedimento com uma data não formatada, irá nos retormar uma data errada.
+
+```{r}
+data_1 <- "02/02/2009"
+data_1 %>% as.Date()
+```
+
+Para isso não acontecer, usaremos a função do lubridate de acordo com o formato da data
+
+```{r}
+data_1 %>% dmy()
+```
+
+Com outra formatação
+
+```{r}
+data_2 <- "2009,2,2"
+data_2 %>% ymd()
+```
+
+
+Geralmente você irá usar uma dessas funções:
+
+- ymd para datas no estilo yyyy-mm-dd
+- dmy para datas no estilo dd-mm-yyyy
+- mdy para datas no estilo mm-dd-yyyy
+
+Para saber mais sobre manipualção de datas, recomendo a leitura do pacote [**aqui**](https://cran.r-project.org/web/packages/lubridate/vignettes/lubridate.html)
+
+# Visualização de dados
+
+
+Uma das coisas mais importantes quando estamos fazendo algum tipo de análise é a visualização dos dados
+
+Caso negligencie essa parte, poderá ter problemas que teriam sido evitados com uma simples olhada em um gráfico.
+
+Por isso é importante sabermos um ferramental básico de contrução de gráficos.
+
+O R possui funções básicas de visualização ja instaladas, como a função `plot()`.
+
+Porém nós iremos aprender utilizando o pacote `ggplot2` que vem instalado junto ao `tidyverse`.
+
+Ele utiliza o conceito de camadas para construir um gráfico, você pode saber mais sobre clicando [aqui](https://ggplot2.tidyverse.org/)
+
+## Tipos de gráficos
+
+Há diversos tipos de gráficos que servem para variados tipos de finalidade. Hoje nós aprenderemos os mais básicos:
+
+- Graficos de barras
+- Graficos de linha
+- Graficos de pontos
+
+### Grafico de barras
+
+Primeiro iremos criar um tibble, que é o dataframe do universo tidyverse. Não se preocupe, um tibble é quase a mesma coisa que um data frame
+
+```{r}
+df1 <- tibble(Notas = c(10,8,4,6),
+       Alunos = c("Jão","Maria","Tony","Sofia"))
+df1
+```
+
+
+Agora iremos mapear os nossos eixos do gráfico (x,y). Se queremos comparar as notas entre os alunos, o nosso eixo x será o nome dos alunos e o eixo y será a nota de cada.
+
+Para mapear os eixos, usaremos o seguinte código:
+
+```{r eval=FALSE, include=T}
+ggplot(df1, # Base de dados
+       aes(
+         x = Alunos, # Eixo x
+         y = Notas) # Eixo y
+       )
+```
+
+```{r echo=FALSE}
+ggplot(df1, # Base de dados
+       aes(
+         x = Alunos, # Eixo x
+         y = Notas) # Eixo y
+       )
+```
+
+
+O que acabamos de fazer foi a primeira camada do nosso gráfico, que é simplesmente o mapeamento dos eixos. Agora iremos de fato definir qual o formato do nosso gráfico, que no caso é o de barras.
+
+```{r eval=FALSE, include=T}
+ggplot(df1, # Base de dados
+       aes(
+         x = Alunos, # Eixo x
+         y = Notas) # Eixo y
+       ) +
+  geom_bar(stat = "identity") # formato do gráfico
+```
+
+```{r echo=FALSE}
+ggplot(df1, # Base de dados
+       aes(
+         x = Alunos, # Eixo x
+         y = Notas) # Eixo y
+       ) +
+  geom_bar(stat = "identity") # formato do gráfico
+```
+
+A função `geom_bar` é a responsável pela geração do gráfico de barras. 
+
+Essa é a segunda camada do nosso gráfico.
+
+Você pode botar mais camadas, mas ai é opcional. Duas é o mínimo.
+
+Repare também que estamos usando o operador `+` ao invés do `%>%`. 
+
+Quando começamos uma função do ggplot2 passamos a usar `+` para ligar as funções.
+
+### Grafico de linha
+
+Normalmente usamos um gráfico de linha para observar dados no tempo
+
+Vamos usar como base de dados o dataframe `economics` do pacote tidyr
+
+```{r}
+head(economics)
+```
+
+
+Iremos elaboar um grafico de linha que relacione no tempo o número total de desempregados da economia americana em milhares, que é representada pela coluna `unemploy`.
+
+O procedimento da primeira camada é o mesmo do gráfico de barras
+
+```{r eval=FALSE, include=T}
+ggplot(economics, # Base de dados
+       aes(
+         x = date, # Eixo x
+         y =unemploy) # Eixo y
+       )  # formato do gráfico
+```
+
+
+
+```{r echo=FALSE}
+ggplot(economics, # Base de dados
+       aes(
+         x = date, # Eixo x
+         y =unemploy) # Eixo y
+       ) 
+```
+
+
+
+Para contruir a segunda camada usaremos a função `geom_line`
+
+
+```{r eval=FALSE, include=T}
+ggplot(economics, # Base de dados
+       aes(
+         x = date, # Eixo x
+         y =unemploy) # Eixo y
+       ) +  
+  geom_line() # formato do gráfico
+```
+
+
+
+```{r echo=FALSE}
+ggplot(economics, # Base de dados
+       aes(
+         x = date, # Eixo x
+         y =unemploy) # Eixo y
+       ) +  
+  geom_line()
+```
+
+### Grafico de pontos
+
+Um grafico de pontos, ou gráfico de dispersão, tem a finalidade de mostrar o relacionamento entre duas variaveis. Se elas tem um relacionemento positivo ou negativo ou até se não há relacionamento.
+
+Para elaborar um desses, utilizaremos as colunas `psavert` e `pce` da base de dados `economics`
+
+
+Mapeando os eixos
+
+```{r eval=FALSE, include=T}
+ggplot(economics, # Base de dados
+       aes(
+         x = pce, # Eixo x
+         y = psavert) # Eixo y
+       ) 
+```
+
+```{r echo=FALSE}
+ggplot(economics, # Base de dados
+       aes(
+         x = pce, # Eixo x
+         y = psavert) # Eixo y
+       ) 
+```
+
+Utilizaremos agora a função geom_point para criar um gráfico de pontos.
+
+```{r eval=FALSE, include=T}
+ggplot(economics, # Base de dados
+       aes(
+         x = pce, # Eixo x
+         y = psavert) # Eixo y
+       ) +
+  geom_point() # formato do gráfico
+```
+
+```{r echo=FALSE}
+ggplot(economics, # Base de dados
+       aes(
+         x = pce, # Eixo x
+         y = psavert) # Eixo y
+       ) +
+  geom_point() # formato do gráfico
+```
+
+## Aesthesics 
+
+Os graficos ainda estão muito simples, há diversas funções para melhorar o visual do pacote. Por enquanto nós iremos carregar o pacote `ggthemes` para melhorar o aspecto visual.
+
+```{r}
+library(ggthemes)
+```
+
+Primeiro irei usar o grafico sobre desemprego como exemplo. Irei grava - lo numa variavel
+
+```{r}
+g1 <- ggplot(economics, # Base de dados
+       aes(
+         x = date, # Eixo x
+         y =unemploy) # Eixo y
+       ) +  
+  geom_line()
+```
+
+Agora irei dar um título para o gráfico
+
+```{r eval=FALSE, include=T}
+g1 + labs(title = "Total de Pessoas Desempregadas nos EUA")
+```
+
+```{r echo=FALSE}
+g1 + labs(title = "Total de Pessoas Desempregadas nos EUA")
+```
+
+Agora irei renomear os eixos x e y e a colocar um caption
+
+```{r eval=FALSE, include=T}
+g1 + labs(title = "Total de Pessoas Desempregadas nos EUA",
+          x = "Ano",
+          y = "Em milhares",
+          caption = "Fonte: FED")
+```
+
+```{r echo=FALSE}
+g1 + labs(title = "Total de Pessoas Desempregadas nos EUA",
+          x = "Ano",
+          y = "Em milhares",
+          caption = "Fonte: FED")
+```
+
+Agora irei mudar o layout do gráfico, para que fique parecido com o layout do jornal **The Economist**. 
+
+```{r eval=FALSE, include=T}
+g1 + labs(title = "Total de Pessoas Desempregadas nos EUA",
+          x = "Ano",
+          y = "Em milhares",
+          caption = "Fonte: FED") +
+  theme_economist()
+```
+
+```{r echo=FALSE}
+g1 + labs(title = "Total de Pessoas Desempregadas nos EUA",
+          x = "Ano",
+          y = "Em milhares",
+          caption = "Fonte: FED") +
+  theme_economist()
+```
+
+Há **N** maneiras de você "embelezar" o seu gráfico e apresentá lo. Mas isso é materia para um curso de storytelling de dados.
+
+Com isso, leia a documentação do pacote ggplot2 e veja esse [link](https://bbc.github.io/rcookbook/) para ver como a BBC usa o R para fazer gráficos
+
+
+# Modelos Cross - Section
+
+## Regressão Linear Simples
+
+Lembra de sua aula de introdução à microeconomia? Tire seu livro do Mankiw do armário!
+
+Agora pense que você irá analisar o mercado de **bananas**. Representando suas curvas de oferta e demanda
+
+curva de demanda: $Y = \beta_{d} - \alpha_{d} X$
+
+curva de oferta: $Y = \beta_{o} + \alpha_{o} X$
+
+Se considerarmos que $\beta_{d} = 20$ e $\beta_{o} = 10$ sendo que $\alpha_{d}$ = 4 e $\alpha_{o}$ = 6
+
+Temos como agora calcular o equilibrio do mercado igualando a curva de demanda a curva de oferta
+
+$20 - 4X = 10 + 6X$ (1) 
+
+$10 = 10X$  (2)
+
+$1 = X$  (3)
+
+Quandidade de equilibrio = 1
+
+Preço de equilibrio = 16
+
+Isso foi o que você provavelmente fez em introdução a micro ou algo do tipo
+
+So que nessa época, o seu professor te dava os valores de $\alpha$ e $\beta$
+
+Agora você mesmo irá calcula - los!
+
+**Disclaimer**
+
+$Y = \beta_{1} + \beta_{2} X$
+
+>-O Y pode ser chamado de varios nomes, como variavel regressora, variavel dependente, variavel resposta e por ai vai.
+
+>- Porém eu irei chama - la de variavel **endógena**, ou seja, que é determinada pelo modelo.
+
+>- A mesma coisa vale para X, que tem varios nomes, mas eu chamarei de varável **exógena**.
+
+>- Resumindo
+
+>- O que estiver no lado esquerdo da equação = **endógena**
+>- O que estiver no lado direito da equação = **exógena**
+
+
+Nesse capitulo iremos usar o pacote `AER` (Applied Econometrics with R) e o pacote caret (Machine Learning)
+
+Cole no console e rode
+```{r}
+# install.packages('AER')
+# install.packages('caret')
+```
+
+```{r}
+library(AER)
+library(caret)
+library(tidyverse)
+```
+
+Iremos analisar agora a base de dados CPS1985, referente a pesquisa de determinação salarial feita em 1985 nos EUA. 
+
+Queremos verificar qual o impacto do total de anos de educação sobre o salario/hora de um indivíduo
+
+Carregando o pacote
+```{r}
+data('CPS1985')
+```
+
+```{r echo=FALSE}
+head(CPS1985)
+```
+
+
+Iremos agora treinar um modelo de regressão linear usando a função `train()` do pacote **caret**
+
+```{r}
+modelo <- train(wage ~ education,
+      method = "lm",
+      data = CPS1985)
+
+```
+
+
+$wage = \beta_{1} + \beta_{2} educ$
+
+Para observarmos as estatisticas do nosso modelo, podemos usar o comando  `summary()`. 
+
+```{r eval=FALSE, include=T}
+summary(modelo)
+```
+
+
+```{r echo=FALSE}
+summary(modelo)
+```
+
+
+Eu particularmente não gosto muito do formato que o summary nos retorna.
+
+Como eu sigo a filosofia do tidyverse, eu transformo isso para um dataframe com a função `tidy()` do pacote `broom` (Já instalado com tidyverse)
+
+```{r}
+summary(modelo) %>% broom::tidy()
+```
+
+$wage = -0.74 + educ 0.75$
+
+O que podemos retirar dessas estatatísticas? 
+
+Normalmente olhamos para essas:
+
+>- O coefieciente das variaveis 
+
+>- O valor *t* dessas variaveis
+
+>- O R²
+
+### Coeficiente
+
+>- Quando analisamos o coeficiente de uma regressão, normalmente nós esperamos o seu sinal devido a uma teoria prévia. 
+
+>- No nosso exemplo esperamos que seja positivo ja que é um consenso que mais anos de estudo impactam positivamente no salario.
+
+>- O que normalmente queremos testar é a magnitude do efeito de uma variavel sobre a outra.
+
+- Quando analisamos o coeficiente de uma regressão, normalmente nós esperamos o seu sinal devido a uma teoria prévia. 
+
+- No nosso exemplo esperamos que seja positivo ja que é um consenso que mais anos de estudo impactam positivamente no salario.
+
+- O que normalmente queremos testar é a magnitude do efeito de uma variavel sobre a outra.
+
+```{r echo=FALSE}
+modelo$finalModel
+```
+
+### Valor T
+
+>- O valor *t* é um valor que vem da formula $t = \frac{\beta}{EP(\beta)}$
+
+>- Essa pequena conta é um teste estatistico que avalia se o nosso coeficiente é diferente de zero. 
+
+>- A regra de bolso que levamos é que se *t* > |2|, podemos rejeitar que o coeficiente é igual a zero
+
+>- Vamos fazer a conta
+
+
+```{r echo=FALSE}
+summary(modelo) %>% broom::tidy()
+```
+
+### R² 
+
+>- O R² mede o poder de explicação de uma regressão
+
+>- Seus valores variam de 0 a 1.
+
+>- No nosso exemplo ele é 0.14, ou 14%
+
+>- Muitos podem se enganar olhando apenas esse indicador, use o com cuidado.
+
+
+```{r}
+summary(modelo) %>% broom::glance()
+```
+
+## Elasticidades
+
+
+Talvez você ja tenha ouvido falar sobre elasticidades, talvez até calculado na forma discreta.
+
+Para calcular elasticidades, precisamos deixar as variaveis logarizadas usando a função `log()`
+
+No nosso exemplo sobre educação, ficaria da seguinte maneira
+
+```{r}
+modelo <- train(log(wage) ~ log(education),
+      method = "lm",
+      data = CPS1985)
+```
+
+
+Observando as estatisticas
+
+```{r}
+summary(modelo) %>% broom::tidy()
+```
+
+
+$log(wage) = 0.07 + 0.78log(educ)$
+
+
+>- Agora a interpretação dos coeficientes muda um pouco. 
+
+>- Nós lemos da seguinte maneira:
+
+>- Se eu aumentar meus anos de estudo em 1%
+
+>- Meu salario/hora irá aumentar em média 0.78% 
+
+>- Todas as estatisticas seguem o mesmo procedimento de análise
+
+
+
+## Regressão Linear Multipla
+
+
+A regressão linear multipla é quando estamos usando mais de uma varivel endógena.
+
+Exemplo
+
+$$
+wage = \beta_{1} + \beta_{2}educ + \beta_{3}experience 
+$$
+
+
+Nós usamos a mesma função no R
+
+
+```{r}
+modelo <- train(wage ~ education + experience,
+      method = "lm",
+      data = CPS1985)
+```
+
+
+```{r}
+summary(modelo) %>% broom::tidy()
+```
+
+
+$wage = -4.9 + 0.92 educ + 0.1 exp$
+
+
+### F-statistic, Valor - P e R² ajustado
+
+>- Além de todas as estatisticas que estudamos, agora temos mais três para analisar
+
+>- A estatistica F é uma continha que testa se conjuntamente, há pelo menos um coeficiente diferente de zero. 
+
+>- Porém não há uma regra de bolso pois ele depende do graus de liberdade da regressão, então olhamos o valor - p por facilidade.
+
+>- A regra de bolso do valor - p é, caso seja menor que 5%(0.05), sua regressão tem pelo menos um coeficiente diferente de zero.
+
+>- O R² de uma regressão sempre irá crescer ou pelo menos ficar constante caso você acrescente uma variavel endógena
+
+>- Por isso, para compararmos regressões multiplas, usamos o R² ajustado, que penaliza o incremento de variáveis que não ajudem o modelo a explicar melhor
+
+
+```{r}
+summary(modelo) %>% broom::glance()
+```
+
+
+
+## Regressão com variáveis categóricas
+
+>- Até agora vimos regressões somente com variáveis endógenas contínuas e/ou discretas.
+
+>- Agora iremos ver como aplicar regressões com variaveis exógenas categóricas, na qual representam classes.
+
+>- Para quem não sabe o que são as categóricas aqui em baixo vão dois exemplos:
+
+>- Categóricas cardinais: Quando não há um ordenamento. Sexo (H,M)
+
+>- Categóricas ordinais: Quando há um ordenamento. Educação (Doutorado > Mestrado > Graduação)
+
+>- No R essas variáveis são da classe `factor`
+
+
+```{r}
+# Gender é uma variavel categorica
+modelo <- train(wage ~ education + experience + gender, 
+      method = "lm",
+      data = CPS1985)
+```
+
+
+```{r}
+summary(modelo) %>% broom::tidy()
+```
+
+$wage = -4.16 + educ 0.94 + exp 0.11 - genderfemale 2.33$
+
+
+## Modelo Logístico
+
+O modelo de regressão logística também usa variáveis categóricas, so que agora endógenamente.
+
+Ou seja, não queremos agora prever um possível número médio, mas sim uma classe como **sim** ou **não**.
+
+Vamos pensar o contrário na nossa base de dados agora. Dado o salário/hora,anos de educação e experiencia conseguimos descobrir se a pessoa é do sexo masculino ou feminino?
+
+
+```{r}
+modelo <- train(gender ~ wage + education + experience, 
+      method = "glm",
+      family = "binomial",
+      data = CPS1985)
+```
+
+```{r}
+summary(modelo)
+```
+
+$gender = -1.44 - 0.13 wage + 0.14 educ + 0.02 exp$
+
+Considerações sobre o modelo logístico
+
+>- A interpretação dos coeficientes são feitas em forma de probablidade, e temos que passar a fórmula $e^\beta$ para calcula-los
+
+>- O mesmo ocorre com a variavel `gender`, que temos que passar a função $\frac{1}{1 + e^y}$
+
+>- Vamos calcular um exemplo
+
+Caso tívessemos uma observação com as seguintes varíaveis
+
+wage = 5.1, educ = 8, exp = 21, qual seria a probabilidade dessa pessoa ser do gênero feminino
+
+Jogando na fórmula
+
+$-1.44 - 0.13*5.1 + 0.14*8 + 0.02*21 = 0.76$
+
+Jogando agora na formula $\frac{1}{1 + e^(0.76)} = 0.31$
+
+A chance de ser do gênenro feminino seria de 31%
+
+Agora para isso voltar como uma variavel categórica nós precisamos definir um valor de decisão que varia entre 0 a 1.
+
+>- Na maioria dos casos esse valor é 0.5, ou seja.
+
+>- Se gender > 0.5, o indivíduo é do genero feminino
+
+>- Se gender < 0.5, o indivíduo é do genero masculino
+
+Podemos automatizar todo esse processo no R com a função `predict`, na qual nos retorna um vetor com a previsão de classificação do nosso data frame.
+
+
+```{r}
+previsao <-predict(modelo,newdata = CPS1985)
+previsao
+```
+
+Verificando a acurácia do modelo, usando uma matriz de confusão
+
+```{r}
+table(previsao,CPS1985[,"gender"])
+```
+Essa matriz de confusão nos retorna diversos indicadores de acurácia do nosso modelo.
+
+Para calcular a acurácia geral fazemos o seguinte: (218 + 130)/ 534 = 65%
+
+Ou seja, nosso modelo acertou no geral 65% das classificações.
+
+Para saber mais sobre essa matriz, [clique aqui](https://medium.com/data-hackers/entendendo-o-que-%C3%A9-matriz-de-confus%C3%A3o-com-python-114e683ec509)
+
+# Séries Temporais
+
+
+Na ultima aula trabalhamos com dados cross section, ou seja, dados que estavam na mesma unidade de tempo.
+
+Agora trabalharemos com dados que variam de acordo com o periodo (Dia,Semana,Mês,Ano)
+
+```{r echo=FALSE}
+plot(AirPassengers,type = "l")
+```
+
+## Padrões de uma serie de tempo
+
+### Tendência
+
+A Tendência pode ser analisada como um crescimento ou decrescimento de longo prazo.
+
+### Sazonalidade
+
+A Sazonalidade pode ser identificada como um padrão que ocorre frequentemente em algum periodo do tempo, como dia, mês ou ano.
+
+### Ciclos
+
+Ciclos são tendencias de alta e queda que não possuem uma frequencia bem definida. Elas são costumeiramente geradas por causas econômicas ou chamados de ciclos de negócios.
+
+### Exemplos
+
+![](/cloud/project/image/series.png)
+
+## Decomposição de uma série temporal
+
+Uma série temporal tem dois tipos de decomposição, aditiva e multiplicativa.
+
+Aditiva
+
+$y_{t} = S_{t} + T_{t} + R_{t}$
+
+Multiplicativa
+
+$y_{t} = S_{t} x T_{t} x R_{t}$
+
+Explicando
+
+$S_{t}$ = Componente Sazonal<p>
+$T_{t}$ = Componente Ciclo_Tendencia<p>
+$R_{t}$ = Componente Restante (aletório)
+
+
+Qual a diferença entre os dois?Além do óbvio
+
+>- Na série com decomposição aditiva, a magnitude da variação sazonal ou ciclo_tendencia não varia com o tempo
+
+>- Já o contrário ocorre na decomposição multiplicativa
+
+>- Vendo graficamente
+
+```{r echo=FALSE, fig.show='hold', out.width=c('50%', '50%')}
+
+plot(AirPassengers,type = "l")
+plot(log(AirPassengers),type = "l")
+
+```
+
+
+Lembrando que
+
+$y_{t} = S_{t} x T_{t} x R_{t}$ = $log(y_{t}) = log(S_{t}) + log(T_{t}) + log(R_{t})$
+
+
+### Decomposição clássica
+
+Para demonstrar o método de decomposição clássica, podemos usar o código a seguir
+
+```{r eval=FALSE, include=T}
+library(ggfortify)
+AirPassengers %>% # Base de dados
+  decompose(type="multiplicative") %>% # Decomposição
+  autoplot()  # Grafico
+```
+
+
+```{r echo=FALSE}
+library(ggfortify)
+AirPassengers %>% 
+  decompose(type="multiplicative") %>% 
+  autoplot()  
+```
+
+## Simple exponential smoothing
+
+Esse método de previsão atribui um peso para as observações passadas para inferir o futuro.
+
+Esse peso na qual chamamos de $\alpha$ varia entre 0 a 1 e decai exponencialmente com o n° de observações.
+
+Ele é útil especialmente quando temos dados sem um tendência ou sazonalidade evidentes
+
+$$
+y_{t + 1|t} = \alpha y_{t} + \alpha (1- \alpha)y + \alpha (1- \alpha)^2 y + ...
+$$
+
+Representação por componentes
+
+Forecast Equaton $y_{t + h|t} = l_{t}$
+
+Smoothing equation $l_{t} = \alpha y_{t} + (1 - \alpha) l_{t - 1}$
+
+
+### Exemplo
+
+Para usar o modelo, temos que recorrer a função `ses()` do pacote `forecast`
+
+```{r}
+library(forecast)
+prev <- AirPassengers %>%
+  ses(h = 12 # Periodos de previsão 
+      )
+```
+
+
+```{r}
+prev
+```
+
+```{r}
+autoplot(prev)
+```
+
+## Holt’s linear trend method
+
+Esse método é uma extensão do antigo, possibilitando a previsão de séries com tendência.
+
+
+Forecast Equation: $y_{t+h|t} = l_{t} + hb_{t}$
+
+Level Equation: $l_{t} = \alpha y_{t} + (1 - \alpha)(l_{t - 1} + b{t-1})$
+
+Trend Equation: $b_{t} = \beta^* (l_{t} - l_{t - 1}) + (1 - \beta ^*)b_{t - 1}$
+
+
+Podemos usar esse método usando a função `holt()` do pacote `forecast`
+
+```{r}
+prev <- holt(AirPassengers,h = 12)
+```
+
+```{r}
+prev 
+```
+
+```{r}
+autoplot(prev)
+```
+
+## Holt-Winters’ seasonal method
+
+Uma segunda extensão do modelo, agora para podermos prever um modelo com sazonalidade. 
+
+Lembrando que temos duas especificações para sazonalidade
+
+- Aditiva
+- Multiplicativa
+
+Para usar o modelo no R, chamamos a função `hw()` do pacote `forecast`
+
+### Holt-Winters’ seasonal method additive
+
+Forecast Equation $y_{t+h|t} = l_{t} + hb_{t} + s_{t+h-m(k+1)}$
+
+Level Equation  $l_{t} = \alpha(y_{t} - s_{t-m}) + (1 - \alpha)(l_{t-1} + b_{t-1})$
+
+Trend Equation $b_{t} = \beta^*(l_{t} - l_{t-1}) + (1 - \beta^*)b_{t-1}$
+
+Seasonal Equation $s_{t} = \gamma (y_{t}-l_{t-1}-b_{t-1}) + (1-\gamma)s_{t-m}$
+
+
+### Holt-Winters’ seasonal method multiplicative
+
+Forecast Equation $y_{t+h|t} = (l_{t} + hb_{t})s_{t+h-m(k+1)}$
+  
+Level Equation  $l_{t} = \alpha \frac{y_{t}}{s_{t-m}} + (1 - \alpha)(l_{t-1} + b_{t-1})$
+  
+Trend Equation  $b_{t} = \beta^*(l_{t}-l_{t-1}) + (1 - \beta^*)b_{t-1}$  
+
+Seasonal Equation  $s_{t} = \gamma \frac{y_{t}}{(l_{t-1} + b_{t-1})} + (1 - \gamma)s_{t-m}$
+
+
+```{r}
+prev_add <- hw(AirPassengers,
+               seasonal = "additive",
+               h = 12)
+
+prev_mult <- hw(AirPassengers,
+               seasonal = "multiplicative",
+               h = 12)
+```
+
+
+```{r}
+autoplot(prev_add)
+```
+
+```{r}
+autoplot(prev_mult)
+```
+
+
+## ARIMA
+
+Modelos ARIMA providenciam outras aproximações para a previsão de séries temporais. 
+
+Enquanto os modelos de suavização exponencial baseavam - se na descrição de têndencia e sazonalidade dos dados, o modelo ARIMA se baseia na autocorrelação dos dados
+
+
+### Estacionariedade
+
+Antes de começar a falar do ARIMA, precisamos saber o conceito de estacionariedade.
+
+Uma série temporal é dita estacionária quando suas propriedades não variam no tempo. 
+
+Exemplificando fracamente, quando sua média e variancia são constantes em toda a série.
+
+Isso não ocorre quando presenciamos tendências e/ou sazonalidade em uma série.
+
+```{r echo=FALSE}
+library(png)
+library(grid)
+img <- readPNG("/cloud/project/image/stationary-1.png")
+grid.raster(img)
+```
+
+Estacionarias (B,G)
+
+### Diferenciação
+
+Para lidar com o problema da Estacionariedade, podemos usar o conceito de **diferenciação**
+
+Ela é calculada através da diferença entre os pontos consecutivos de uma série, estabilizando assim a média da mesma.
+
+1° Diferença
+
+$$
+y'_{t} = y_{t} - y_{t -1}
+$$
+2° Diferença
+
+$$
+ y''_{t}  =  y'_{t}  - y'_{t - 1} 
+          = y_t - 2y_{t-1} +y_{t-2}
+$$
+Diferença Sazonal
+
+$$
+y'_t = y_t - y_{t-m}
+$$
+
+### Teste de estacionariedade
+
+Há alguns testes que nos informam se uma série é estacionária. Os mais conhecidos são o ADF e o KPSS.
+
+Nós iremos testar se a serie de passagens é estacionária com a função `ur.kpss` do pacote `urca`.
+
+A hipótese nula é que a série é estacionária
+
+```{r eval=FALSE, include=T}
+library(urca)
+
+AirPassengers %>% ur.kpss() %>% summary()
+```
+
+```{r echo=FALSE}
+library(urca)
+AirPassengers %>% ur.kpss() %>% summary()
+```
+
+O valor de test-statistic = 2.7395. O valor crítico há 1% é de 0.739
+
+Ou seja, podemos rejeitar que ela é **estacionária**
+
+Teremos então de diferenciar a série e testar novamente. Podemos diferenciar a série usando a função diff()
+
+```{r eval=FALSE, include=T}
+AirPassengers %>% diff() %>% ur.kpss() %>% summary()
+```
+
+```{r echo=FALSE}
+AirPassengers %>% diff() %>% ur.kpss() %>% summary()
+```
+
+Como o valor de teste é menor do que o valor crítico a 1%, não rejeitamos que a 1° diferença é estacionária.
+
+
+### Modelos Autorregresivos
+
+Modelos auto regressivos são parecidos com os modelos de regressão múltipla. Porém as variaveis exógenas agora são os valores defasados da variável endógena.
+
+$$
+y_{t} = c + \phi_{1}y_{t-1} + \phi_{2}y_{t-2} + \dots + \phi_{p}y_{t-p} + \varepsilon_{t}
+$$
+Nós nos referimos a esses modelos como um AR(p), onde p é a ordem da defasagem
+
+### Modelos de médias móveis
+
+Em vez de usar valores passados da variável de previsão em uma regressão, um modelo de média móvel usa erros de previsão passados em um modelo semelhante a regressão.
+
+$$
+y_{t} = c + \varepsilon_t + \theta_{1}\varepsilon_{t-1} + \theta_{2}\varepsilon_{t-2} + \dots + \theta_{q}\varepsilon_{t-q}
+$$
+Nós nos referimos a isso como um MA (q), um modelo de média móvel de ordem q. Obviamente, não observamos os valores de $\varepsilon$, portanto, não é realmente uma regressão no sentido usual.
+
+
+
+### ARIMA Especificação
+
+Se combinarmos diferenciação com autoregressão e um modelo de média móvel, obteremos um modelo ARIMA não sazonal. O modelo completo não sazonal pode ser escrito como
+
+$$
+ y'_{t} = c + \phi_{1}y'_{t-1} + \cdots + \phi_{p}y'_{t-p}
+     + \theta_{1}\varepsilon_{t-1} + \cdots + \theta_{q}\varepsilon_{t-q} + \varepsilon_{t}
+$$
+
+Nos chamamos esse modelo de ARIMA(p,d,q) onde
+
+p = parte auto regressiva
+d = n° de diferenciações
+q = parte média movel
+
+### Estimando um ARIMA
+
+Especificar um arima por conta prórpia requer prática, o que por enquanto está fora do escopo desse curso.
+
+Porém, o R traz a possibilidade de você estimar o melhor modelo possivel com a função `auto.arima`
+
+###  Gerando o modelo
+
+```{r eval=FALSE, include=T}
+fit <- auto.arima(AirPassengers)
+summary(fit)
+```
+
+
+```{r echo=FALSE}
+fit <- auto.arima(AirPassengers)
+summary(fit)
+```
+
+
+
+### Gerando Previsão
+
+```{r eval=FALSE, include=T}
+prev <- forecast(fit,12)
+```
+
+```{r echo=FALSE}
+prev <- forecast(fit,12)
+```
+
+
+```{r eval=FALSE, include=T}
+autoplot(prev)
+```
+
+
+```{r echo=FALSE}
+autoplot(prev)
+```
+
+
+
+
+
+
+
+
+
+
+
+

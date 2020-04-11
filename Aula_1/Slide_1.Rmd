@@ -1,0 +1,722 @@
+---
+title: "R para Economia"
+author: "Lucas Mendes"
+date: "24/03/2020"
+output: 
+  beamer_presentation:
+    theme: "AnnArbor"
+    colortheme: "dolphin"
+    fonttheme: "structurebold"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T,
+                      include = T,
+                      warning = F,
+                      message = F)
+```
+
+
+# O que veremos nesse curso
+
+## O que veremos nesse curso
+
+>- Introdução ao R 
+>- Manipulação de dados 
+>- Visualização de dados
+>- Regressão Linear e Logística
+>- Séries Temporais
+>- Relatórios
+
+# Avisos
+
+## Avisos
+
+>- R não é excel
+>- Em um primeiro momento pode não fazer sentido
+>- Você vai errar muito
+>- Muito mesmo
+>- Busque Ajuda
+
+# Quem irá te ajudar?
+
+## Quem irá te ajudar?
+
+>- Karmendes
+>- Se a aula for presencial, seu colega ao lado
+>- [**Stackoverflow**](https://stackoverflow.com/)
+>- Páginas aleatórias do google sobre R
+>- Blogs de R
+>- [A bíblia do R](https://r4ds.had.co.nz/)
+
+# Introdução ao R
+
+
+
+
+## O que veremos agora?
+
+>- Operadores
+>- Objetos Atômicos
+>- Vetores
+>- Matrizes
+>- Data Frames
+>- Listas
+
+
+# Layout do Rstudio 
+
+## Layout do Rstudio
+
+![](/cloud/project/image/layout1.png)
+
+## Layout do Rstudio
+
+![](/cloud/project/image/layout2.png)
+
+
+## Layout do Rstudio
+
+![](/cloud/project/image/layout3.png)
+
+
+## Layout do Rstudio
+
+![](/cloud/project/image/layout4.png)
+
+
+
+# Disclaimer
+## Disclaimer
+
+Nós temos que diferenciar duas coisas nesse curso: 
+
+Variáveis != Objetos
+
+Variável = Serve para armazenar objetos.
+Objeto = Coisas que manipulamos no R (Vetor, Matriz, Tabelas, Gráficos...)
+
+Regra da criação de variáveis
+
+1° Não começa com Números: **1x** não é possivel. **x1** sim
+
+2° Há palavras que não podem se tornar variaveis: **TRUE** e **FALSE** por exemplo.
+
+3° Há diferenciação de minúscula para maiúscula: **X** != **x**
+
+# Operadores 
+
+## Operadores 
+
+Nós iremos abordar dois tipos de operadores:
+
+>- Os operadores de atribuição
+>- Os operadores relacionais
+
+>- **Operadores de atribuição**: Atribuem um valor ou objeto a uma variável
+>- **Operadores relacionais**: Perguntam se dada  afirmação é *Falsa* ou *Verdadeira*
+
+
+## Operador de atribuição
+
+Podemos usar tanto o sinal `=` como o `<-`, sendo mais comum o último.
+
+
+### Exemplo 1
+
+```{r}
+x = 10
+```
+
+### Exemplo 2
+```{r}
+x <- 12
+```
+
+## O que está ocorrendo
+
+Quando você roda uma linha de código, como :
+
+```{r}
+x <- 10
+```
+
+O que acontece é que o computador aloca na memoria dele um espaço para armazenar a variavel `x` que consequentemente tem o valor 10.
+
+Se você passar qualquer outro valor para `x` e rodar o código, o computador ira tirar da memória o valor anterior e gravar o novo.
+
+# Em imagens
+
+## Gravando uma variavel
+
+![](/cloud/project/image/image1.png)
+
+
+## Gravando uma variavel
+
+![](/cloud/project/image/image2.png)
+
+## Gravando uma variavel
+
+![](/cloud/project/image/image4.png)
+
+## Gravando uma variavel
+
+![](/cloud/project/image/image5.png)
+
+# Modo Errado
+
+## Gravando uma variavel
+
+![](/cloud/project/image/image6.png)
+
+## Gravando uma variavel
+
+![](/cloud/project/image/image7.png)
+
+# Gravando um valor em cima
+
+## Gravando uma variavel
+
+![](/cloud/project/image/image8.png)
+
+## Gravando uma variavel
+
+O computador lê uma sequencia de comandos
+
+>- Portanto, fica armazenada na memória a última linha rodada.
+
+## Operador Lógico
+
+Há uma pequena lista bem intuitiva de operadores lógicos que iremos destrinchar, mas para resumir: Esses operadores fazem perguntas na qual são respondidas com **True** ou **False**
+
+>- Operador de **Maior que**: `>`
+>- Operador de **Menor que**: `<`
+>- Operador de **Maior igual**: `>=`
+>- Operador de **Menor igual**: `<=`
+>- Operador **Igual a **: `==`
+>- Operador **Diferente de**: `!=`
+
+## Exemplos
+
+```{r}
+# Inicializando valores nas variaveis
+a <- 2
+b <- 3
+```
+
+```{r}
+# Maior que
+a > b
+```
+
+## Exemplos
+
+```{r}
+# Menor que
+a < b
+```
+
+```{r}
+# Maior Igual que
+a >= b
+```
+
+## Exemplos
+
+```{r}
+# Menor igual que
+a <= b
+```
+
+```{r}
+# Igual que
+a == b
+```
+
+```{r}
+# Diferente de
+a != b
+```
+
+# Exercicio com a ajuda do professor
+
+# Objetos Atômicos
+
+## Objetos Atômicos
+
+O R possui muitos objetos atômicos. Nós iremos ver agora os **4 principais**:
+
+>- Numerics (Double)
+>- Inteiros (Double)
+>- Caracters (Characters)
+>- Lógicos (Booleanos,Binários)
+
+## Numerics
+
+Os objetos `Numerics` representam números,obviamente.
+
+Qualquer número que você digite no R, vai ser da **Classe** dos númericos previamente
+
+```{r}
+# Criando objeto atômico numérico
+x <- 5.3
+
+# Observando sua classe
+class(x)
+```
+
+## Funções
+
+Como você viu no ultimo slide, o R é feito de funções, no caso usamos a função `class()`. 
+
+Todas as funções no R possuem esse formato
+
+`nome_da_função(param1,param2,param3,...)`
+
+As vezes a função tem apenas 1 parâmetro obrigatório e outros são opcionais
+
+Caso você queria ver como usar a função, rode no seu console `?nome_da_função`
+
+
+
+## Inteiros
+
+Explicando péssimamente os objetos inteiros são como fosse objetos `Numerics`, só que **arredondados**.
+
+Como todos os números que botamos no R são da classe `Numeric` previamente, temos que usar a função `as.intenger()` para transformar um objeto em `inteiro`
+
+```{r}
+z <- 4.3
+class(z)
+# Transformando
+z <- as.integer(z)
+z
+```
+
+## Caracter {.smaller}
+
+Os objetos `caracter` representam um texto no R.
+
+Textos são normalmente formados por letras, porém números também podem aparecer.
+
+`caracter` é caracterizado pelo uso de **aspas** ('') envolvendo - os
+
+```{r}
+t <- 'd'
+class(t)
+```
+
+Observe que o código abaixo produz um `caracter` e não um `numeric`, pelo uso das aspas
+
+```{r}
+w <- '2'
+class(w)
+```
+
+## Lógicos
+
+Objetos do tipo `lógicos` são objetos que retornam `TRUE` ou `FALSE` como vimos anteriormente.
+
+
+```{r}
+t <- TRUE
+f <- FALSE
+```
+
+```{r}
+class(t)
+
+```
+
+```{r}
+class(f)
+```
+
+# Exercicios
+
+## Exercicios
+
+# Vetores
+
+## Vetores
+
+Vetor é um dos objetos mais importantes no R. Ele é a base para a construção dos outros 2 objetos que iremos estudar. 
+
+Caracteristicas de um vetor:
+
+>- O vetor é um objeto unidimensional
+>- O vetor só aceita uma classe de objetos atômicos
+>- A classe dos elementos que compôe o vetor é a classe do mesmo
+>- A função `c()` cria um vetor
+
+## Criando um vetor de caracteres
+
+```{r}
+# Criando
+v1 <- c("MC","Kevin","o","Chris")
+print(v1)
+```
+
+```{r}
+# Verificando a classe
+class(v1)
+```
+
+## Criando um vetor de numerics
+
+
+```{r}
+# Criando
+v2 <- c(1,2,3,4)
+print(v2)
+```
+
+```{r}
+# Verificando a classe
+class(v2)
+```
+
+## Combinando Vetores
+
+Podemos combinar dois vetores em um
+
+```{r}
+# Vetores
+v1 <- c("MC","Kevin","o","Chris")
+v2 <- c(1,2,3,4)
+
+# Combinando 
+
+v3 <- c(v1,v2)
+print(v3)
+```
+
+## Dominancia de classes
+
+Caracter > Numeric > Inteiro > Lógico
+
+## Operações com vetores
+
+Podemos fazer operações básicas com os vetores
+
+```{r}
+a <- c(1,2)
+b <- c(3,4)
+```
+
+```{r}
+# Subtração
+a - b
+```
+
+## Operações com vetores {.smaller}
+
+```{r}
+# Soma
+a + b
+```
+
+```{r}
+# Divisão
+a / b
+```
+
+```{r}
+# Multiplicação
+a * b
+```
+
+```{r}
+# Potenciação
+a^b
+```
+
+## E se os vetores tiverem tamanhos diferentes?
+
+```{r}
+a <- c(1,2)
+b <- c(3,4,5,6)
+```
+
+```{r}
+# Soma
+a + b
+```
+
+>- Sim, repete - se o vetor menor até o fim do vetor maior
+
+>- Essa operação se dá o nome de **Reciclagem**
+
+## Mas e se os tamanhos não forem múltiplos?
+
+```{r}
+a <- c(1,2)
+b <- c(3,4,5,6,7)
+```
+
+```{r}
+# Soma
+a + b
+```
+
+>- A mesma coisa acontece, só que o vetor menor não irá ser somado todos os seus elementos na ultima repetição
+
+
+# Exercicios
+
+# Matriz
+
+## Matriz
+
+Matrizes são muito similares aos vetores, a única diferença é que são objetos bidimensionais.
+
+Um vetor poderia ser composto por uma linha ou uma coluna.
+
+Já matrizes são compostas obrigatóriamente por linhas e colunas
+
+resumindo:
+
+>- A matriz é um objeto composto por linhas e colunas
+>- Ela só aceita uma classe de objetos atômicos
+>- A classe dos elementos que compôe a matriz é a classe da mesma
+>- A função `matrix()` cria uma matriz
+>- Para preencher uma matriz você terá que passar um vetor dentro dela 
+>- **This way**: `matrix(c())`
+
+## Criando uma matriz com 4 elementos
+
+```{r}
+matrix(c(1,2,3,4))
+```
+
+>- O padrão de uma matriz é ser preenchida por coluna
+>- Podemos especificar quantas colunas queremos em uma matriz com o parâmetro `nc`
+>- Podemos fazer o mesmo procedimento so que por linhas com o parâmetro `nr`
+
+## Criando uma matriz de 4 elementos e 2 colunas
+
+```{r}
+matrix(c(1,2,3,4),nc = 2)
+```
+
+## Criando uma matriz de 4 elementos e 4 linhas
+
+```{r}
+matrix(c(1,2,3,4),nr = 4)
+```
+
+
+
+## Criando uma matriz de 4 elementos preenchida por linha
+
+Para preencher uma matriz por linha, podemos usar o parâmetro `byrow = TRUE`
+
+```{r}
+matrix(c(1,2,3,4),
+       nc = 2,
+       byrow = TRUE)
+```
+
+
+# Exercicio
+
+# Data Frames
+
+## Data Frames
+
+Data frames são como matrizes, porém não possuem restriçoes de classe.
+
+São os objetos que se parecem com planilhas ou tabelas do excel
+
+Resumindo:
+
+>- Um Data Frame é um objeto composto por linhas e colunas
+>- Ela aceita mais de uma classe de objetos atômicos
+>- A classe do objeto data frame é data.frame
+>- A função `data.frame()` cria uma data frame
+>- Para criar as colunas de um data frame você terá que passar um vetor 
+>- **This way**: `data.frame(Alunos = c(),Escola = c())`
+
+## Data frame
+
+
+```{r}
+# Criando Data Frame
+df1 <- data.frame(Times = c("Flamengo","Palmeiras"),
+                 Libertadores = c(2,1),
+                 Mundial = c(TRUE,FALSE))
+```
+
+```{r echo=FALSE}
+df1
+```
+
+##  Data Frame {.smaller}
+
+```{r}
+# Informações
+str(df1)
+```
+
+```{r}
+# N° Colunas
+ncol(df1)
+```
+
+```{r}
+# N° Linhas
+nrow(df1)
+```
+
+##  Data Frame {.smaller}
+
+```{r}
+mtcars
+```
+
+##  Data Frame 
+
+```{r}
+# Observando as primeiras 6 linhas
+head(mtcars)
+```
+
+##  Data Frame 
+
+```{r}
+# Observando as ultimas 6 linhas
+tail(mtcars)
+```
+
+##  Data Frame 
+
+```{r}
+# Nome das colunas
+names(df1)
+```
+
+```{r}
+# Renomeando as colunas
+names(df1) <- c("Clube","Libertadores","Tem_Mundial")
+```
+
+```{r echo=FALSE}
+df1
+```
+
+# Exercicios
+
+
+# Listas
+
+## Listas
+
+Listas são um dos objetos mais complexos do R. Em um primeiro momento ele pode confundir, mas não passa de um vetor ampliado.
+
+Resumindo:
+
+>- Listas armazenam qualquer objeto nelas mesmas (vetores,data frames,matrizes,listas)
+
+>- Elas são dividas pelo que chamamos de nós
+
+>- Para criar uma lista nós chamamos a função `list()`
+
+## Exemplo
+
+
+```{r include=TRUE,echo=TRUE}
+x1 <- list(c(1, 2), c(3, 4))
+x2 <- list(list(1, 2), list(3, 4))
+x3 <- list(1, list(2, list(3)))
+```
+
+## Estrutura de uma lista
+
+![](/cloud/project/image/list.png)
+
+## Exemplo de lista não nomeada
+
+Criando uma lista com matriz e data frame
+
+```{r eval=FALSE, message=FALSE, warning=FALSE, include=T}
+
+df <- data.frame(coluna1 = c(1,2,3,4),
+                 coluna2 = c(42,5,2,5))
+m1 <- matrix(c(1:8),nc = 2)
+
+list1 <- list(df, # 1° Nó
+              m1) # 2° Nó
+               
+
+```
+
+## Exemplo
+
+```{r echo=FALSE}
+
+df <- data.frame(coluna1 = c(1,2,3,4),
+                 coluna2 = c(42,5,2,5))
+m1 <- matrix(c(1:8),nc = 2)
+
+list1 <- list(df, # 1° Nó
+              m1) # 2° Nó
+             
+list1
+```
+
+## Exemplo de lista nomeada
+
+Vetor e data frame
+
+```{r eval=FALSE, include=TRUE}
+
+df1 <- data.frame(x = c("Start","End"),
+                  y = c(FALSE,TRUE))
+v1 <- c(1,2,3,4,5)
+
+list2 <- list(primeiro = df1,
+              segundo = v1)
+
+```
+
+## Exemplo de lista nomeada
+Vetor e data frame
+
+```{r echo=FALSE}
+
+df1 <- data.frame(x = c("Start","End"),
+                  y = c(FALSE,TRUE))
+v1 <- c(1,2,3,4,5)
+
+list2 <- list(primeiro = df1,
+              segundo = v1)
+
+```
+
+## Onde estudar listas?
+
+Acesse [aqui](https://r4ds.had.co.nz/vectors.html#lists)
+
+O exemplo acima foi tirado de lá.
+
+
+
+
+
+# Exercicios
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

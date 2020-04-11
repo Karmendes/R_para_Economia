@@ -1,0 +1,179 @@
+---
+title: "Exercicios"
+output: beamer_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      include = T,
+                      warning = F,
+                      message = F,
+                      fig.width = 5,
+                      fig.height = 3)
+
+```
+
+
+Antes de começar, faça o seguinte:
+
+1. Instale o pacote devtools -> install.packages("devtools")
+
+2. Depois rode o comando no console -> devtools::install_github("wilsonfreitas/rbcb")
+
+3. Caso ele peça para que você digite algum número no console, apenas de um enter no console. Isto é, não digite nada.
+
+4. Verifique se você possui instalado agora o pacote rbcb
+
+# Pacotes necessários
+
+```{r}
+library(tidyverse)
+library(ggfortify)
+library(forecast)
+library(urca)
+library(rbcb)
+```
+
+
+# Exercicio Sobre decomposição
+
+1. Rode o chunck abaixo
+
+```{r}
+IPCA <- get_series(433,
+                   start_date = "2003-01-01",
+                   end_date = "2018-12-31",
+                   as = "ts")
+```
+
+2. Com a função autoplot(), plote o objeto IPCA criado no chunck anterior
+
+```{r}
+autoplot(IPCA)
+```
+
+3. De acordo com o gráfico do IPCA:
+
+a) Você consegue detectar visualmente alguma tendência?
+
+b) Você consegue detectar visualmente alguma sazonalidade?
+
+c) Você consegue detectar visualmente algum ciclo?
+
+
+4. Gere um gráfico de decomposição da série. Lembre - se de usar a função decompose() antes de gerar o gráfico
+
+```{r}
+IPCA %>% decompose() %>% autoplot()
+```
+
+5. Gere previsões para 12 periodos a frente sobre o IPCA com os modelos vistos até agora e grave-os nas variáveis já explicitadas abaixo.
+
+```{r}
+# Simple exponential smoothing
+
+prev_simples <- ses(IPCA,h = 12)
+```
+
+```{r}
+# Holt’s linear trend
+
+prev_trend <- holt(IPCA,12)
+
+```
+
+```{r}
+# Holt-Winters
+
+prev_hw <- hw(IPCA,seasonal = "additive",h = 12)
+```
+
+
+Agora rode os dois chunck abaixo
+
+```{r}
+IPCA_2019 <- get_series(433,
+                   start_date = "2019-01-01",
+                   end_date = "2019-12-31",
+                   as = "ts")
+```
+
+```{r}
+
+prev <- tibble(simples = prev_simples$mean,
+       holt = prev_trend$mean,
+       holt_winters = prev_hw$mean,
+       IPCA_2019 = IPCA_2019) %>% ts()
+
+```
+
+
+
+Agora gere um autoplot para o objeto prev criado no último chunk
+
+```{r}
+prev %>% autoplot()
+
+```
+
+Rode o chunck abaixo
+
+```{r}
+prev_list <- list(
+  simples = prev_simples$mean,
+       holt = prev_trend$mean,
+       holt_winters = prev_hw$mean
+)
+
+map_dfr(prev_list,accuracy,IPCA_2019) %>% cbind(tibble(indicadores = c('ME','RMSE','MAE','MPE','MAPE','      ACF1','Theil s U')))
+```
+
+Procure ver qual modelo teve o menor RMSE. Esse indicador irá dizer qual modelo errou menos.
+
+
+# Exercicio sobre ARIMA
+
+1. Com a variavel IPCA, verifique se a mesma é estacionária usando a função ur.kpss()
+
+```{r}
+IPCA %>% ur.kpss() %>% summary()
+```
+
+2. Crie um modelo arima e observer sua especificação
+
+```{r}
+arima <- auto.arima(IPCA)
+arima %>% summary()
+```
+
+3. Faça a previsão para 12 meses a frente e grave na variavel prev
+
+```{r}
+prev <- forecast(arima,12)
+```
+
+4. Plote a previsão
+
+```{r}
+autoplot(prev)
+```
+
+5. Rode o chunk abaixo
+
+```{r}
+prev_arima <- tibble(ARIMA = prev$mean,
+       IPCA_2019 = IPCA_2019) %>% ts()
+```
+
+Agora gere um autoplot para o objeto prev criado no último chunk
+
+```{r}
+prev_arima %>% autoplot()
+```
+
+Acurácia do modelo
+
+```{r}
+accuracy(prev$mean,IPCA_2019)
+```
+

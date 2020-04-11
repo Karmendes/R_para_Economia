@@ -1,0 +1,424 @@
+---
+title: "Exercicios"
+author: ""
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      include = T,
+                      warning = F,
+                      message = F)
+```
+
+# Notas Iniciais
+
+## .Rmd x .R
+Esse arquivo que você está lendo é um arquivo com extensão .Rmd
+
+É um tipo de arquivo que chamamos de híbrido, onde podemos escrever texto e rodar código aparecendo o output no mesmo local
+
+Porém também tem o arquivo com extensão .R, na qual só escrevemos código e o output aparece na aba console
+
+
+## Calculadora
+
+O R funciona como uma calculadora, confira nos exemplos abaixo
+
+
+Se eu quiser somar 1 + 1
+
+```{r}
+1 + 1
+```
+
+Se eu quiser dividir 4/3
+
+```{r}
+4/3
+```
+
+Se eu quiser multiplicar 2 x 2
+
+```{r}
+2 * 2
+```
+
+Se que quiser saber o resto da divisão de 5/3
+
+```{r}
+5%%3
+```
+
+Se eu quiser saber o valor de 3²
+
+```{r}
+3^2
+```
+
+
+# Exercicio 1
+
+1-  Falando sobre operadores de atribuição, crie uma variavel e insira nela o valor 10
+
+```{r}
+
+```
+
+2- Agora imprima ela na tela usando a função print()
+
+Dica: Para saber como usar a função, sublinhe-a e tecle fn + F1 ou rode ?print
+```{r}
+
+```
+
+3- Com a mesma variável, insira agora o valor 15
+
+```{r}
+
+```
+
+4- Agora imprima novamente na tela
+
+```{r}
+
+```
+
+# Exercicio 2
+
+1- Falando agora sobre operadores relacionais, crie duas variaveis chamadas respectivamente x e y, passando para elas os valores 5 e 8
+
+```{r}
+
+```
+
+2- Use os operadores relacionais para descobrir se x é maior,menor,igual e diferente de y
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+# Exercicio 3
+
+Falando um pouco sobre objetos atômicos
+
+1- Crie um objeto do tipo character e verifique sua classe
+
+Dica: Use a função class() para verificar a classe 
+
+```{r}
+
+```
+
+2- Crie um objeto do tipo integer e verifique sua classe
+
+```{r}
+
+```
+
+3- Transforme um objeto do tipo integer para um do tipo character e verifique sua classe
+
+Dica: Para trasnformar um objeto em character, use a função as.character()
+
+```{r}
+
+```
+
+4- Transforme um objeto do tipo numeric para um do tipo logical e verifique sua classe
+
+Dica: Para trasnformar um objeto em logical, use a função as.logical()
+
+```{r}
+
+```
+
+# Exercicio 4
+
+1- Falando de vetores, crie um vetor de numerics contendo 5 elementos e grave na variavel x. Crie outro vetor contendo 4 elementos numericos e grave na variavel y
+
+```{r}
+
+
+```
+
+2- Agora faça as operaçoes básicas entre eles
+
+```{r}
+# Soma
+
+```
+
+```{r}
+# Subtração
+
+```
+
+```{r}
+# Divisão
+
+```
+
+```{r}
+# Multiplicação
+
+```
+
+Se por a caso quisessemos extrair um elemento de um vetor, como fariamos? Nesse caso é só passar a variável que o vetor está contido e logo após passar a posição do elemento que queremos extrair dentro de colchetes
+
+Exemplo:
+
+Vou criar um vetor de character, rode o código abaixo. 
+
+```{r}
+vetor <- c("a","b","c","d","e")
+print(vetor)
+```
+
+Agora vou extrair o elemento que está na 3° posição do vetor, que no caso é o character "c",rode o código abaixo.
+
+```{r}
+vetor[3]
+```
+
+Viu como é facil? Agora tente extrair para mim os characteres "a" e "b"
+
+Dica: Pesquise no google sobre slice de vetores em R (Nome do que estamos fazendo)
+
+```{r}
+
+```
+
+
+# Exercicio 5
+
+1- Falando sobre matrizes, crie uma matriz 3x3 e grave na variavel m1
+
+```{r}
+
+```
+
+2- Agora crie uma matriz 3x3 e grave na variavel m2
+
+```{r}
+
+```
+
+
+3- Use a função t() (função que retorna a transposta da matriz) em m2 e grave numa variavel chamada tm2
+
+```{r}
+
+```
+
+4 - Multiplique tm2 e m1 e grave na variavel m4
+
+```{r}
+
+```
+
+5- Use a função det() em m4 e verifique se o resultado é diferente de 0
+
+Caso a função det não funcione, provavelmente sua matriz não é N X N ou ela tem alguma combinação linear que faz o determinante ser 0
+
+```{r}
+
+```
+
+6 - Use a função solve (Calcula a inversa da matriz) em m4 e grave em m5
+
+```{r}
+
+```
+
+7- Agora multiplique m5 com m4 usando o operador %*%, que é usado para multiplicação matricial. Se o resultado for uma matriz preenchida por 1 na diagonal e zero no resto, você acertou tudo!
+
+dica: Bote a operação de multiplicação dentro da função round(operação)
+
+```{r}
+
+```
+
+# Exercicio 6
+
+Falando sobre data frames:
+
+1- Imagine que eu tenha os seguintes dados
+
+Continente: America,Europa,Asia,Africa
+Paises: Brasil,Portugal,China,Togo
+IDH: 0.5,0.9,0.6,0.4
+
+Você consegue fazer um data frame contendo essas informações?
+
+```{r}
+
+```
+
+2- Como você sabe, o R possui muitos data frames já carregados. Você pode dar uma olhada rodando o comando abaixo.
+
+```{r}
+data()
+```
+
+
+3- Use a lista da ultima questão para encontrar dataframe USArrests e passe - o  como parâmetro da função head() para visualizar as primeiras linhas
+
+```{r}
+
+```
+
+4- Agora use a função colnames para obter somente os nomes das colunas.
+
+```{r}
+
+```
+
+5- Agora use a função summary() que irá trazer um resumo estatistico de cada coluna do data frame
+
+```{r}
+
+```
+
+Se lembra como você extrai-a elementos em um vetor (slice)? Bom, há como fazer isso também em data frames e matrizes, vamos ver uma demonstração.
+
+Como ambos são bidimensionais, temos que passar dentro do colchete qual linha e coluna queremos extrair.
+
+Exemplo: Extraindo a 1° linha e 2° Coluna
+
+```{r}
+USArrests[1,2]
+```
+
+Dentro do colchete, o lado direito da vírgula representa as linhas, o lado esquerdo representa as colunas.
+
+Caso você queira fazer o slice para mais de uma linha ou coluna ou para ambos, veja o exemplo abaixo: 
+
+Exemplo: Extraindo a 1° e 2° linha conjuntamente da 1° e 3° coluna
+
+```{r}
+USArrests[c(1,2),c(1,3)]
+```
+
+
+
+Extraindo a 6° linha da 2° coluna
+
+```{r}
+
+```
+Extraindo a 2° linha da 4° coluna
+
+```{r}
+
+```
+
+Para extrair uma coluna ou linha inteira de um data frame, você deve deixar em branco a posição relativa a elas dentro do colchete
+
+Exemplo: Extraindo a 1° Linha e todas as colunas 
+
+```{r}
+USArrests[1,]
+```
+
+Exemplo: Extraindo a 1° coluna e todas as linhas 
+
+```{r}
+USArrests[,1]
+```
+
+
+
+Extraindo a 2° coluna inteira
+
+```{r}
+
+```
+Extraindo a 6° linha inteira
+
+```{r}
+
+```
+Agora extraia da 4° linha a 10° linha conjuntamente com a 1° e 2° coluna
+
+
+
+
+
+# Exercicio 7
+
+Falando Sobre Listas,
+
+1- Crie um vetor,uma matriz e um dataframe e coloque -os em um lista
+
+```{r}
+
+```
+
+
+2- Agora crie uma lista com os mesmos objetos do exercicio anterior mais a lista que você criou no exercicio anterior.
+
+```{r}
+
+```
+
+3- Imprima na tela a lista
+
+```{r}
+
+```
+
+Você pode ver no console que há numeros com duplos colchetes certo? Eles são o que chamamos de nós da lista. Ele nos ajudam na hora extrair dados de uma lista (slice). O procedimento pode ser visualizado na imagem abaixo
+
+
+![](/cloud/project/image/slice_list.png)
+
+
+Reproduza os slices acima:
+
+Para isso você terá de criar uma lista com os elementos do primeiro retangulo à esquerda.
+
+```{r}
+# Criar a lista nomeada "a"
+```
+
+```{r}
+
+```
+
+
+```{r}
+
+
+```
+
+```{r}
+
+
+```
+
+```{r}
+
+
+
+```
+
+```{r}
+
+
+
+```
+
