@@ -7,6 +7,7 @@ output:
     theme: "AnnArbor"
     colortheme: "dolphin"
     fonttheme: "structurebold"
+    df_print: kable
 ---
 
 ```{r setup, include=FALSE}
@@ -26,7 +27,6 @@ knitr::opts_chunk$set(echo = T,
 >- Visualização de dados
 >- Regressão Linear e Logística
 >- Séries Temporais
->- Relatórios
 
 # Avisos
 
@@ -88,13 +88,6 @@ knitr::opts_chunk$set(echo = T,
 
 # Disclaimer
 ## Disclaimer
-
-Nós temos que diferenciar duas coisas nesse curso: 
-
-Variáveis != Objetos
-
-Variável = Serve para armazenar objetos.
-Objeto = Coisas que manipulamos no R (Vetor, Matriz, Tabelas, Gráficos...)
 
 Regra da criação de variáveis
 
@@ -185,6 +178,19 @@ Se você passar qualquer outro valor para `x` e rodar o código, o computador ir
 O computador lê uma sequencia de comandos
 
 >- Portanto, fica armazenada na memória a última linha rodada.
+
+## Regrinhas
+
+Regra para criação de variáveis
+
+>- O R é **case sensitive**, ou seja, diferecia minúsculas de maiúsculas ` X é diferente de x`
+
+>- Não começe nomes de variáveis com números. `1x` não pode, `x1` pode.
+
+>- Não coloque acentos no nome das varáveis(Se puder, nomes em inglês)
+
+>- Alguns nomes são indisponíveis para variáveis (FALSE,TRUE,NULL,for)
+
 
 ## Operador Lógico
 
@@ -335,8 +341,6 @@ class(f)
 
 # Exercicios
 
-## Exercicios
-
 # Vetores
 
 ## Vetores
@@ -393,6 +397,10 @@ print(v3)
 ```
 
 ## Dominancia de classes
+
+Isso se dá quando tentamos concatenar vetores de diferentes classes. 
+
+Como um vetor só aceita um classe, ele converte a classe mais fraca para a classe dominante
 
 Caracter > Numeric > Inteiro > Lógico
 
@@ -622,18 +630,57 @@ Resumindo:
 
 >- Para criar uma lista nós chamamos a função `list()`
 
+## Analogia
+
+Imagine:
+
+>-  que esse armário é nossa lista
+
+>- Cada gaveta desse armário é um nó da lista
+
+>- Cada gaveta dele armazena um objeto
+
+![](/cloud/project/image/gaveta.jpg)
+
 ## Exemplo
 
 
 ```{r include=TRUE,echo=TRUE}
-x1 <- list(c(1, 2), c(3, 4))
-x2 <- list(list(1, 2), list(3, 4))
-x3 <- list(1, list(2, list(3)))
+
+# x1 é nossa lista (Armário)
+x1 <- list(c(1, 2), # Nó 1 (Gaveta 1) (Guarda um vetor)
+           c(3, 4)) # Nó 2 (Gaveta 2) (Guarda um vetor)
+
+```
+
+
+## Exemplo
+
+
+```{r include=TRUE,echo=TRUE}
+# x2 é outra lista
+x2 <- list(list(1, # 1° nó de x2 e 1° nó da lista interior
+                2),# 1° nó de x2 e 2° nó da lista interior
+           list(3, # 2° nó de x2 e 1° nó da lista interior
+                4))# 2° nó de x2 e 2° nó da lista interior
+```
+
+
+## Exemplo
+
+
+```{r include=TRUE,echo=TRUE}
+# x3 é outra lista
+x3 <- list(1, # 1° nó da lista x3
+           list(2, # 2° no da lista x3 e 1° nó da lista interior
+                list(3)))
 ```
 
 ## Estrutura de uma lista
 
 ![](/cloud/project/image/list.png)
+
+
 
 ## Exemplo de lista não nomeada
 
@@ -681,7 +728,6 @@ list2 <- list(primeiro = df1,
 ```
 
 ## Exemplo de lista nomeada
-Vetor e data frame
 
 ```{r echo=FALSE}
 
@@ -692,6 +738,8 @@ v1 <- c(1,2,3,4,5)
 list2 <- list(primeiro = df1,
               segundo = v1)
 
+list2
+
 ```
 
 ## Onde estudar listas?
@@ -699,10 +747,6 @@ list2 <- list(primeiro = df1,
 Acesse [aqui](https://r4ds.had.co.nz/vectors.html#lists)
 
 O exemplo acima foi tirado de lá.
-
-
-
-
 
 # Exercicios
 

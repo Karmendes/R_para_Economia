@@ -7,6 +7,7 @@ output:
     theme: "AnnArbor"
     colortheme: "dolphin"
     fonttheme: "structurebold"
+    df_print: kable
 ---
 
 
@@ -14,7 +15,9 @@ output:
 knitr::opts_chunk$set(echo = TRUE,
                       include = T,
                       warning = F,
-                      message = F)
+                      message = F,
+                      fig.width = 5,
+                      fig.height = 3)
 ```
 
 # Modelos Cross - Section
@@ -31,19 +34,25 @@ curva de oferta: $Y = \beta_{o} + \alpha_{o} X$
 
 ## Regressão Linear Simples
 
-Se considerarmos que $\beta_{d} = 20$ e $\beta_{o} = 10$ sendo que $\alpha_{d}$ = 4 e $\alpha_{o}$ = 6
+Se considerarmos que $\beta_{d} = 80$ e $\beta_{o} = 10$ sendo que $\alpha_{d}$ = 4 e $\alpha_{o}$ = 6
+
+>- curva de demanda: $Y = 80 - 4X$
+>- curva de oferta: $Y = 10 + 6X$
+
+## Regressão Linear Simples
 
 Temos como agora calcular o equilibrio do mercado igualando a curva de demanda a curva de oferta
 
-$20 - 4X = 10 + 6X$ (1) 
+$80 - 4X = 10 + 6X$ (1) 
 
-$10 = 10X$  (2)
+$70 = 10X$  (2)
 
-$1 = X$  (3)
+$7 = X$  (3)
 
-Quandidade de equilibrio = 1
+Quandidade de equilibrio = 7
 
-Preço de equilibrio = 16
+Preço de equilibrio = 52
+
 
 ## Regressão Linear Simples
 
@@ -57,15 +66,13 @@ Agora você mesmo irá calcula - los!
 
 
 
-$Y = \beta_{1} + \beta_{2} X$
+$$Y = \beta_{1} + \beta_{2} X$$
 
->-O Y pode ser chamado de varios nomes, como variavel regressora, variavel dependente, variavel resposta e por ai vai.
+>- O $Y$ pode ser chamado de varios nomes, como variavel regressora, variavel dependente, variavel resposta e por ai vai.
 
 >- Porém eu irei chama - la de variavel **endógena**, ou seja, que é determinada pelo modelo.
 
->- A mesma coisa vale para X, que tem varios nomes, mas eu chamarei de varável **exógena**.
-
->- Resumindo
+>- A mesma coisa vale para $X$, que tem varios nomes, mas eu chamarei de varável **exógena**.
 
 >- O que estiver no lado esquerdo da equação = **endógena**
 >- O que estiver no lado direito da equação = **exógena**
@@ -101,8 +108,14 @@ data('CPS1985')
 ## Regressão Linear Simples
 
 ```{r echo=FALSE}
-head(CPS1985)
+head(CPS1985)[,1:5]
 ```
+
+## Regressão Linear Simples
+
+$$wage = \beta_{1} + \beta_{2} educ$$
+
+Essa é nossa especificação da regressão, o código seguinte irá calcular os parâmetros $\beta_{1}$ e $\beta_{2}$
 
 
 ## Regressão Linear Simples
@@ -110,19 +123,17 @@ head(CPS1985)
 Iremos agora treinar um modelo de regressão linear usando a função `train()` do pacote **caret**
 
 ```{r}
-modelo <- train(wage ~ education,
-      method = "lm",
-      data = CPS1985)
+modelo <- train(wage ~ # Variavel Exógena
+                  education, # Variavel endógena
+                method = "lm", # Linear Model
+                data = CPS1985) # Base de dados
 
 ```
 
-## Regressão Linear Simples
-
-$wage = \beta_{1} + \beta_{2} educ$
 
 ## Regressão Linear Simples
 
-Para observarmos as estatisticas do nosso modelo, podemos usar o comando  `summary()`. 
+Com o modelo criado,podemos observar as estatisticas usando o comando  `summary()`. 
 
 ```{r eval=FALSE, include=T}
 summary(modelo)
@@ -141,23 +152,18 @@ Eu particularmente não gosto muito do formato que o summary nos retorna.
 Como eu sigo a filosofia do tidyverse, eu transformo isso para um dataframe com a função `tidy()` do pacote `broom` (Já instalado com tidyverse)
 
 ```{r}
-summary(modelo) %>% broom::tidy()
+library(broom)
+summary(modelo) %>% tidy()
 ```
 
 
 ## Regressão Linear Simples 
 
+$$wage = -0.74 + educ 0.75$$
 
+O que podemos retirar do modelo e das estatísticas? 
 
-$wage = -0.74 + educ 0.75$
-
-
-
-## Regressão Linear Simples
-
-O que podemos retirar dessas estatatísticas? 
-
-Normalmente olhamos para essas:
+Normalmente olhamos para:
 
 >- O coefieciente das variaveis 
 
@@ -175,19 +181,20 @@ Normalmente olhamos para essas:
 
 >- O que normalmente queremos testar é a magnitude do efeito de uma variavel sobre a outra.
 
-## Regressão Linear Simples
+>- O nosso modelo nos forneceu que $\beta_{2}$ era 0.75
 
+>- A interpretação portanto é: Se um indivíduo estuda 1 ano a mais, ele ganha em média 0.75 centavos/hora a mais de salário
+
+## Regressão Linear Simples
 ### Coeficiente
 
-- Quando analisamos o coeficiente de uma regressão, normalmente nós esperamos o seu sinal devido a uma teoria prévia. 
+>- Supondo que um indivíduo A estudou 10 anos
 
-- No nosso exemplo esperamos que seja positivo ja que é um consenso que mais anos de estudo impactam positivamente no salario.
+>- Salario/hora = $-0.74 + 10 * 0.75 = 6.76$
 
-- O que normalmente queremos testar é a magnitude do efeito de uma variavel sobre a outra.
+>- Supondo que um individuo B estudou 11 anos
 
-```{r echo=FALSE}
-modelo$finalModel
-```
+>- Salario/hora = $-0.74 + 11 * 0.75 = 7.51$
 
 
 ## Regressão Linear Simples
@@ -196,21 +203,20 @@ modelo$finalModel
 
 >- O valor *t* é um valor que vem da formula $t = \frac{\beta}{EP(\beta)}$
 
->- Essa pequena conta é um teste estatistico que avalia se o nosso coeficiente é diferente de zero. 
+>- Essa pequena conta é um teste estatistico que avalia se o nosso coeficiente $\beta_{i}$ é diferente de zero. 
 
->- A regra de bolso que levamos é que se *t* > |2|, podemos rejeitar que o coeficiente é igual a zero
+>- A regra de bolso que levamos é que se *t* > |2|, podemos rejeitar que o coeficiente é igual a zero.
 
 >- Vamos fazer a conta
+
 
 ## Regressão Linear Simples
 ### Valor T
 
 
 ```{r echo=FALSE}
-summary(modelo) %>% broom::tidy()
+summary(modelo) %>% tidy()
 ```
-
-
 
 ## Regressão Linear Simples
 
@@ -224,12 +230,29 @@ summary(modelo) %>% broom::tidy()
 
 >- Muitos podem se enganar olhando apenas esse indicador, use o com cuidado.
 
+
+## Regressão Linear Simples
+### R²
+
+$$ 
+R² = \frac{SQE}{SQT}
+$$
+
+$$
+SQR = SQT - SQE
+$$
+
+SQT = Soma dos quadrados Totais
+SQE = Soma dos quadrados Explicados
+SQR = Soma dos quadrados dos Resíduos
+
+
 ## Regressão Linear Simples
 
 ### R² 
 
 ```{r}
-summary(modelo) %>% broom::glance()
+summary(modelo) %>% glance()
 ```
 
 # Exercicios
@@ -261,10 +284,7 @@ summary(modelo) %>% broom::tidy()
 
 ## Regressão Linear Simples (Elasticidades)
 
-$log(wage) = 0.07 + 0.78log(educ)$
-
-
-## Regressão Linear Simples (Elasticidades)
+$$log(wage) = 0.07 + 0.78log(educ)$$
 
 >- Agora a interpretação dos coeficientes muda um pouco. 
 
@@ -275,6 +295,63 @@ $log(wage) = 0.07 + 0.78log(educ)$
 >- Meu salario/hora irá aumentar em média 0.78% 
 
 >- Todas as estatisticas seguem o mesmo procedimento de análise
+
+
+
+# Regressão Linear Simples (Elasticidades)
+
+## Logs
+
+Logarizar os também serve para:
+
+- Deixar relações exponenciais em lineares
+
+$$
+y = x_{1}^{\beta_{1}}x_{2}^{\beta_{2}}
+$$
+Se aplicarmos log
+
+$$
+log(y) = \beta_{1}log(x_{1}) + \beta_{2}log(x_{2})
+$$
+
+
+
+## Cobb Douglas
+
+Testando no R retornos de escala
+
+```{r}
+cobb_douglas <- function(x1,x2,beta1 = 0.5,beta2 = 0.5){
+  x1^beta1 * x2^beta2
+}
+
+crescente <- cobb_douglas(seq(1:20),seq(1:20),beta1 = 1,beta2 = 1)
+constante <- cobb_douglas(seq(1:20),seq(1:20))
+decrescente <- cobb_douglas(seq(1:20),seq(1:20),beta1 = 0.3,beta2 = 0.3)
+```
+
+
+
+## Cobb Douglas
+
+```{r echo=FALSE}
+
+cobb <- tibble(crescente = crescente,
+       constante = constante,
+       decrescente = decrescente,
+       x1 = 1:20,
+       x2 = 1:20)
+
+cobb %>%
+  ggplot(aes(x1,x2)) +
+  geom_line(aes(y = crescente),colour = "red",size = 2) +
+  geom_line(aes(y = constante),colour = "blue",size = 2) +
+  geom_line(aes(y = decrescente),colour = "green",size = 2)
+
+```
+
+
 
 # Exercicios
 

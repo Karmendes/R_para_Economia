@@ -7,6 +7,7 @@ output:
     theme: "AnnArbor"
     colortheme: "dolphin"
     fonttheme: "structurebold"
+    df_print: kable
 ---
 
 ```{r setup, include=FALSE}
@@ -78,9 +79,9 @@ Para importar um csv usamos a função `read.csv()`
 
 ```{r echo=TRUE}
 # Importando
-df1 <- read.csv("dados/iris.csv",
-                header = T,
-                sep = ",")
+df1 <- read.csv("dados/iris.csv", # Caminho
+                header = T, # Há cabeçalho
+                sep = ",") # separador de coluna
 
 ```
 
@@ -99,7 +100,8 @@ Para exportar um data frame para um arquivo csv, utilizamos a função `write.cs
 
 ```{r eval=FALSE, include=TRUE}
 # Exportando
-write.csv(df1,"dados/petalas.csv")
+write.csv(df1, # Seu dataframe
+          "dados/petalas.csv") # caminho e nome do arquivo
 ```
 
 ## Excel
@@ -111,10 +113,12 @@ Não há função nativa para importar ou exportar arquivos em excel. Para isso 
 library(xlsx)
 
 # Importando dados
-df1 <- read.xlsx('dados/arquivo1.xlsx',sheetIndex = 1)
+df1 <- read.xlsx('dados/arquivo1.xlsx', # caminho
+                 sheetIndex = 1) # Número da Planilha
 
 # Exportando dados
-write.xlsx(df1,"dados/arquivo.xlsx")
+write.xlsx(df1,# data frame
+           "dados/arquivo.xlsx") # caminho e nome
 ```
 
 ## Funções rápidas
@@ -132,7 +136,6 @@ Para saber mais sobre qualquer outra função, experimente colocar o `?` na fren
 # Exercicios
 
 # Introdução a manipulação de dados
-
 
 ## Manipulação de dados
 
@@ -197,7 +200,7 @@ Para selecionar essas colunas, usaremos a função `select()` do dplyr.
 library(dplyr)
 
 df2 <- df1 %>%
-  select(QUANTITYORDERED,PRICEEACH,COUNTRY)
+  select(QUANTITYORDERED,PRICEEACH,COUNTRY) # Colunas do df
 ```
 
 ## Selecionando colunas necessárias
@@ -214,7 +217,7 @@ Como nosso patrão não quer os EUA, iremos filtrá - lo, usando a função filt
 
 ```{r}
 df2 <- df2 %>%
-  filter(COUNTRY != "USA")
+  filter(COUNTRY != "USA") # Retira os USA da coluna Country
 ```
 
 ## Filtrando o País
@@ -232,6 +235,7 @@ Como se calcula receita? É só multiplicar a quantidade vendida pelo preço uni
 ```{r}
 df2 <- df2 %>%
   mutate(Revenue = QUANTITYORDERED * PRICEEACH)
+# Cria a coluna Revenue
 ```
 
 ## Calculando receita total por produto
@@ -249,8 +253,8 @@ Agora queremos um resumo da receita total por país. Para isso teremos de agrupa
 
 ```{r}
 df2 <- df2 %>% 
-  group_by(COUNTRY) %>%
-  summarise(Total_Revenue = sum(Revenue))
+  group_by(COUNTRY) %>% # Agrupa os países 
+  summarise(Total_Revenue = sum(Revenue)) # Sumariza a receita total
 ```
 
 ## Como agrupar e sumarizar os dados 
@@ -266,7 +270,7 @@ head(df2)
 Lembre que queremos as maiores receitas por país? Agora iremos ordenar a nossa tabela por ordem descrescente de receita, para isso usaremos a função arrange()
 
 ```{r}
-df2 <- df2 %>% arrange(desc(Total_Revenue))
+df2 <- df2 %>% arrange(desc(Total_Revenue)) # Ordena pela receita
 ```
 
 ## Como ordenar os dados?
@@ -325,13 +329,13 @@ A função gather transforma um data frame do formato wide em um data frame no f
 
 
 ```{r include=FALSE}
-df_long <- data.frame(Ano = c(2008,2009,2010,2011,2012),
+df_wide <- data.frame(Ano = c(2008,2009,2010,2011,2012),
                  Receita = runif(5,1000,3000),
                  Despesa = runif(5,1000,3000))
 ```
 
 ```{r}
-df_long 
+df_wide 
 ```
 
 ## Função gather
@@ -343,7 +347,7 @@ df_gather <- df %>% gather(Indicadores,Valores,-Ano)
 ## Função gather
 
 ```{r echo=FALSE}
-df_gather <- df_long %>% gather(Indicadores,Valores,-Ano)
+df_gather <- df_wide %>% gather(Indicadores,Valores,-Ano)
 df_gather
 ```
 
@@ -364,6 +368,47 @@ df_gather %>% spread(Indicadores,Valores)
 ```{r echo=FALSE}
 df_gather %>% spread(Indicadores,Valores)
 ```
+
+# unite
+
+## unite
+
+Essa função tem como objetivo unir duas ou mais colunas em uma.
+
+```{r echo=FALSE}
+df <- tibble(Nome = c("Lucas","Julia","Leandro","Amanda"),
+             Sobrenome = c("Mendes","Mesquita","Lopes","Cassar"))
+df
+```
+
+## unite
+
+```{r}
+df %>%
+  unite(Nome_Completo, # Nome da coluna de união
+        c(Nome,Sobrenome)) # Colunas a serem unidas
+```
+
+```{r include=FALSE}
+df <- df %>%
+  unite(Nome_Completo, # Nome da coluna de união
+        c(Nome,Sobrenome)) # Colunas a serem unidas
+```
+
+
+# Separate
+
+## Separate
+
+Essa função faz o contrário da `unite`, ou seja, separa uma coluna em várias
+
+```{r}
+df %>%
+  separate(Nome_Completo,
+           c("Nome","Sobrenome"))
+```
+
+
 
 # Resumindo
 
