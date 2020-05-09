@@ -29,23 +29,29 @@ library(lubridate)
 
 
 
-# Exercicios importação e exportação de dados
+# Importação/Exportação
 
 
-1- Importe o arquivo Salaries.csv com a função read.csv()
+## Exercicio 1
+
+Importe o arquivo Salaries.csv com a função read.csv()
 
 
 ```{r}
 
 ```
 
-2- Importe o mesmo arquivo agora com a função read_csv()
+## Exercicio 2 
+
+Importe o mesmo arquivo agora com a função read_csv()
 
 ```{r}
 
 ```
 
-3- Agora exporte o arquivo com a função write_csv
+## Exercicio 3
+
+Agora exporte o arquivo com a função write_csv
 
 Lembre se de que você deverá dar um nome para o novo arquivo
 
@@ -56,21 +62,25 @@ Lembre se de que você deverá dar um nome para o novo arquivo
 Dica do capítulo: Sempre de preferência as funções do readr como read_csv e write_csv. Elas são mais simples e rápidas.
 
 
-# Exercicios do dplyr
+# dplyr
 
-1- Importe o arquivo sales.csv
+## Exercicio 1
+
+Importe o arquivo sales.csv
 
 ```{r}
 df1 <- read_csv("dados/sales.csv")[,-1]
 ```
 
-1- Visualize - o com a função head()
+## Exercicio 2 
+
+Visualize - o com a função head()
 
 ```{r}
 head(df1)
 ```
 
-3 -
+## Exercicio 3
 
 Imagine que eu queira agora uma tabela que me diga quais são os 3 estados dos EUA que tem maior receitas com o produto de motocicletas. Como faríamos? Vou te dar um passo a passo:
 
@@ -84,7 +94,9 @@ Será que a função select nos ajuda nessa seleção?
 
 Não se esqueça de olhar sempre como os seus dados ficaram depois da função, use head()
 
-B) Agora precisamos filtrar o país, que no caso é os EUA (Está como USA).
+## Exercicio 4 
+
+Agora precisamos filtrar o país, que no caso é os EUA (Está como USA).
 
 Será que a função filter nos ajuda nessa filtragem?
 
@@ -92,13 +104,17 @@ Será que a função filter nos ajuda nessa filtragem?
 
 ```
 
-C) Agora precisamos filtrar o produto, que no caso é a motocicleta (Está como Motorcycles).
+## Exercicio 5
+
+Agora precisamos filtrar o produto, que no caso é a motocicleta (Está como Motorcycles).
 
 ```{r}
 
 ```
 
-D) Agora precisamos criar uma coluna que nos dê a receita de cada transação, para isso temos que multiplicar o preço pela quantidade vendida.
+## Exercicio 6 
+
+Agora precisamos criar uma coluna que nos dê a receita de cada transação, para isso temos que multiplicar o preço pela quantidade vendida.
 
 Será que a função mutate pode nos ajudar?
 
@@ -106,7 +122,9 @@ Será que a função mutate pode nos ajudar?
 
 ```
 
-E) Agora podemos resumir a tabela, na qual queremos agrupar por estado e calcular a receita total de cada um deles.
+## Exercicio 7 
+
+Agora podemos resumir a tabela, na qual queremos agrupar por estado e calcular a receita total de cada um deles.
 
 Será que group_by e summarize nos ajudariam?
 
@@ -114,7 +132,9 @@ Será que group_by e summarize nos ajudariam?
 
 ```
 
-F) Agora queremos arranjar as receias em ordem decrescente,
+## Exercicio 8 
+
+Agora queremos arranjar as receias em ordem decrescente,
 
 Será que a função arrange(desc()) nos ajudaria?
 
@@ -122,7 +142,9 @@ Será que a função arrange(desc()) nos ajudaria?
 
 ```
 
-G) Agora queremos pegar somente os 3 maiores,
+## Exercicio 9 
+
+Agora queremos pegar somente os 3 maiores,
 
 Será que a função slice nos ajudaria?
 
@@ -132,20 +154,26 @@ Será que a função slice nos ajudaria?
 
 # Exercicios do tidyr
 
-1- Quando carregamos o pacote tidyverse, ele carrega um data frame chamado economics. De um head() nele e observe - o
+## Exercicio 1 
+
+Quando carregamos o pacote tidyverse, ele carrega um data frame chamado economics. De um head() nele e observe - o
 
 ```{r}
 data("economics")
 
 ```
 
-2- Veja que ele está no formato wide, como poderiamos fazer para transforma - lo no formato long e preservar somente a coluna de datas? Dica: Use spread()
+## Exercicio 2
+
+Veja que ele está no formato wide, como poderiamos fazer para transforma - lo no formato long e preservar somente a coluna de datas? Dica: Use spread()
 
 ```{r}
 
 ```
 
-3- Agora que está no formato long, como fazemos para transforma -lo no formato wide novamente? Dica: Use a função gather()
+## Exercicio 3 
+
+Agora que está no formato long, como fazemos para transforma -lo no formato wide novamente? Dica: Use a função gather()
 
 ```{r}
 
@@ -153,7 +181,9 @@ data("economics")
 
 # Exercicios com lubridate
 
-1- Vou criar umas datas para utilizarmos como exemplo, porém elas serão do tipo character ainda
+## Exercicio 1
+
+Vou criar umas datas para utilizarmos como exemplo, porém elas serão do tipo character ainda
 
 ```{r}
 d1 <- "20010104"
@@ -161,7 +191,9 @@ d2 <- "01/12/2009"
 d3 <- "12,3,2007"
 ```
 
-2- Usando as funções que aprendemos, utilize - as para formatar corretamente as datas a cima. Padrão correto: yyyy-mm-dd
+## Exercicio 1 
+
+Usando as funções que aprendemos, utilize - as para formatar corretamente as datas a cima. Padrão correto: yyyy-mm-dd
 
 ```{r}
 

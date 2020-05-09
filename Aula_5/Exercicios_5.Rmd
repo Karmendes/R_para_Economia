@@ -37,7 +37,9 @@ library(rbcb)
 
 # Exercicio Sobre decomposição
 
-1. Rode o chunck abaixo
+## Exercicio 1 
+
+Rode o chunck abaixo
 
 ```{r}
 IPCA <- get_series(433,
@@ -46,46 +48,57 @@ IPCA <- get_series(433,
                    as = "ts")
 ```
 
-2. Com a função autoplot(), plote o objeto IPCA criado no chunck anterior
+## Exercicio 2
+
+Com a função autoplot(), plote o objeto IPCA criado no chunck anterior
 
 ```{r}
-autoplot(IPCA)
+
 ```
 
-3. De acordo com o gráfico do IPCA:
+## Exercicio 3
 
-a) Você consegue detectar visualmente alguma tendência?
+De acordo com o gráfico do IPCA:
 
-b) Você consegue detectar visualmente alguma sazonalidade?
+## Exercicio 3.1 
 
-c) Você consegue detectar visualmente algum ciclo?
+Você consegue detectar visualmente alguma tendência?
+
+## Exercicio 3.2 
+
+Você consegue detectar visualmente alguma sazonalidade?
+
+## Exercicio 3.3 
+
+Você consegue detectar visualmente algum ciclo?
 
 
-4. Gere um gráfico de decomposição da série. Lembre - se de usar a função decompose() antes de gerar o gráfico
+## Exercicio 4 
+
+Gere um gráfico de decomposição da série. Lembre - se de usar a função decompose() antes de gerar o gráfico
 
 ```{r}
-IPCA %>% decompose() %>% autoplot()
+
 ```
 
-5. Gere previsões para 12 periodos a frente sobre o IPCA com os modelos vistos até agora e grave-os nas variáveis já explicitadas abaixo.
+# Métodos de suavização
+
+Gere previsões para 12 periodos a frente sobre o IPCA com os modelos vistos até agora e grave-os nas variáveis já explicitadas abaixo.
 
 ```{r}
 # Simple exponential smoothing
 
-prev_simples <- ses(IPCA,h = 12)
 ```
 
 ```{r}
 # Holt’s linear trend
 
-prev_trend <- holt(IPCA,12)
 
 ```
 
 ```{r}
 # Holt-Winters
 
-prev_hw <- hw(IPCA,seasonal = "additive",h = 12)
 ```
 
 
@@ -112,7 +125,6 @@ prev <- tibble(simples = prev_simples$mean,
 Agora gere um autoplot para o objeto prev criado no último chunk
 
 ```{r}
-prev %>% autoplot()
 
 ```
 
@@ -133,32 +145,43 @@ Procure ver qual modelo teve o menor RMSE. Esse indicador irá dizer qual modelo
 
 # Exercicio sobre ARIMA
 
-1. Com a variavel IPCA, verifique se a mesma é estacionária usando a função ur.kpss()
+## Exercicio 1 
+
+Com a variavel IPCA, verifique se a mesma é estacionária usando a função ur.kpss()
 
 ```{r}
-IPCA %>% ur.kpss() %>% summary()
+
 ```
 
-2. Crie um modelo arima e observer sua especificação
+## Exercicio 2 
+
+Crie um modelo arima e observer sua especificação
 
 ```{r}
-arima <- auto.arima(IPCA)
-arima %>% summary()
+
+
+
 ```
 
-3. Faça a previsão para 12 meses a frente e grave na variavel prev
+## Exercicio 3
+
+Faça a previsão para 12 meses a frente e grave na variavel prev
 
 ```{r}
-prev <- forecast(arima,12)
+
 ```
 
-4. Plote a previsão
+## Exercicio 4
+
+Plote a previsão
 
 ```{r}
-autoplot(prev)
+
 ```
 
-5. Rode o chunk abaixo
+## Exercicio 5
+
+Rode o chunk abaixo
 
 ```{r}
 prev_arima <- tibble(ARIMA = prev$mean,
@@ -168,12 +191,12 @@ prev_arima <- tibble(ARIMA = prev$mean,
 Agora gere um autoplot para o objeto prev criado no último chunk
 
 ```{r}
-prev_arima %>% autoplot()
+
 ```
 
 Acurácia do modelo
 
 ```{r}
-accuracy(prev$mean,IPCA_2019)
+
 ```
 

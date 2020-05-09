@@ -18,6 +18,8 @@ knitr::opts_chunk$set(echo = TRUE,
                       message = F,
                       fig.width = 5,
                       fig.height = 3)
+library(tidyverse)
+library(lubridate)
 ```
 
 # Modelos Cross - Section
@@ -43,15 +45,13 @@ Se considerarmos que $\beta_{d} = 80$ e $\beta_{o} = 10$ sendo que $\alpha_{d}$ 
 
 Temos como agora calcular o equilibrio do mercado igualando a curva de demanda a curva de oferta
 
-$80 - 4X = 10 + 6X$ (1) 
+$$80 - 4X = 10 + 6X\ (1) $$
+$$70 = 10X\ (2)$$  
+$$7 = X\ (3)$$ 
 
-$70 = 10X$  (2)
+**Quandidade** de equilibrio = 7
 
-$7 = X$  (3)
-
-Quandidade de equilibrio = 7
-
-Preço de equilibrio = 52
+**Preço** de equilibrio = 52
 
 
 ## Regressão Linear Simples
@@ -65,8 +65,8 @@ Agora você mesmo irá calcula - los!
 ## Disclaimer
 
 
-
-$$Y = \beta_{1} + \beta_{2} X$$
+### Especificação do modelo de regressão linear simples
+$$y = \beta_{1} + \beta_{2} x$$
 
 >- O $Y$ pode ser chamado de varios nomes, como variavel regressora, variavel dependente, variavel resposta e por ai vai.
 
@@ -77,6 +77,87 @@ $$Y = \beta_{1} + \beta_{2} X$$
 >- O que estiver no lado esquerdo da equação = **endógena**
 >- O que estiver no lado direito da equação = **exógena**
 
+## Diferença entre da teoria para a vida real
+
+
+### Modelo Determinístico
+
+$$
+y = \beta_{1} + \beta_{2} x
+$$
+
+### Modelo estocástico
+
+
+$$
+y = \beta_{1} + \beta_{2} x + \epsilon
+$$
+
+- O que é o $\epsilon$? O erro do nosso modelo, você não achava que ele ia acertar sempre né?
+
+- O nosso algoritmo de regressão vai tentar achar $\beta_1$ e $\beta_2$ que esse erro.
+
+
+## Graficamente
+
+```{r echo=FALSE}
+set.seed(3)
+df <- tibble(quantidade = rnorm(100,mean = 10000,sd = 1000),
+       price = 100000 - 2*quantidade + rnorm(100,mean = 10000,sd = 1000))
+
+modelo <- lm(price ~ quantidade,df)
+
+df$fit <- modelo$fitted.values
+
+g1 <- df %>%
+ggplot(aes(quantidade,price)) +
+  geom_point() +
+  theme_minimal()
+g1
+```
+
+## Achando a reta melhor reta
+
+```{r echo=FALSE}
+g2 <- g1 +
+  geom_smooth(method = "lm")
+g2
+```
+
+## Achando a reta melhor reta
+
+- Nós queremos achar a melhor reta que descreve o relacionamento entre as variáveis, ou seja, aquela que minimiza o erro
+
+- Note porém que não é qualquer erro, estamos falando do erro quadrado
+
+## Onde está o erro?
+
+```{r echo=FALSE}
+g2 +
+  geom_segment(aes(x=quantidade, 
+                   xend=quantidade, 
+                   y=fit, 
+                   yend=price), 
+               size=0.3,
+               colour = "red")
+```
+
+## Onde está o erro?
+
+O erro é o quadrado das retas em vermelho (Distância do ponto até a reta). 
+
+$$
+\epsilon = y - \beta_{1} + \beta_{2} x
+$$
+Elevando tudo ao quadrado...
+
+$$
+\sum_{i = 1}^{n} (y - \beta_1 + \beta_2 x)^2
+$$
+
+- Desse jeito, derivamos para achar o melhor $\alpha$ e $\beta$
+
+- Mas isso o algoritmo faz por nós!
 
 ## Regressão Linear Simples
 
@@ -91,7 +172,7 @@ Cole no console e rode
 ```{r}
 library(AER)
 library(caret)
-library(tidyverse)
+
 ```
 
 ## Regressão Linear Simples
@@ -111,7 +192,10 @@ data('CPS1985')
 head(CPS1985)[,1:5]
 ```
 
+
 ## Regressão Linear Simples
+
+### Especificando nossa regressão
 
 $$wage = \beta_{1} + \beta_{2} educ$$
 
@@ -159,6 +243,9 @@ summary(modelo) %>% tidy()
 
 ## Regressão Linear Simples 
 
+
+### Nosso modelo estimado
+
 $$wage = -0.74 + educ 0.75$$
 
 O que podemos retirar do modelo e das estatísticas? 
@@ -188,11 +275,11 @@ Normalmente olhamos para:
 ## Regressão Linear Simples
 ### Coeficiente
 
->- Supondo que um indivíduo A estudou 10 anos
+>- Supondo que um indivíduo **A** estudou 10 anos
 
 >- Salario/hora = $-0.74 + 10 * 0.75 = 6.76$
 
->- Supondo que um individuo B estudou 11 anos
+>- Supondo que um individuo **B** estudou 11 anos
 
 >- Salario/hora = $-0.74 + 11 * 0.75 = 7.51$
 
@@ -235,16 +322,16 @@ summary(modelo) %>% tidy()
 ### R²
 
 $$ 
-R² = \frac{SQE}{SQT}
+R^2 = \frac{SQE}{SQT}
 $$
 
 $$
 SQR = SQT - SQE
 $$
 
-SQT = Soma dos quadrados Totais
-SQE = Soma dos quadrados Explicados
-SQR = Soma dos quadrados dos Resíduos
+- SQT = Soma dos quadrados Totais
+- SQE = Soma dos quadrados Explicados
+- SQR = Soma dos quadrados dos Resíduos
 
 
 ## Regressão Linear Simples
@@ -298,59 +385,69 @@ $$log(wage) = 0.07 + 0.78log(educ)$$
 
 
 
-# Regressão Linear Simples (Elasticidades)
+# Um pouco da sua aula de micro
 
-## Logs
+## Micro
 
-Logarizar os também serve para:
+Logarizar também serve para:
 
 - Deixar relações exponenciais em lineares
 
+Supondo que temos uma função de produção F(L) = Y
+
 $$
-y = x_{1}^{\beta_{1}}x_{2}^{\beta_{2}}
+Y = \beta_1 + L^{\beta_2}
 $$
 Se aplicarmos log
 
 $$
-log(y) = \beta_{1}log(x_{1}) + \beta_{2}log(x_{2})
+log(Y) = \beta_1 + \beta_2log(L)
 $$
 
 
+## Micro
 
-## Cobb Douglas
-
-Testando no R retornos de escala
-
-```{r}
-cobb_douglas <- function(x1,x2,beta1 = 0.5,beta2 = 0.5){
-  x1^beta1 * x2^beta2
-}
-
-crescente <- cobb_douglas(seq(1:20),seq(1:20),beta1 = 1,beta2 = 1)
-constante <- cobb_douglas(seq(1:20),seq(1:20))
-decrescente <- cobb_douglas(seq(1:20),seq(1:20),beta1 = 0.3,beta2 = 0.3)
-```
-
-
-
-## Cobb Douglas
+Rodando essa regressão...
 
 ```{r echo=FALSE}
+set.seed(2)
+df <- tibble(
+  L = rnorm(100,mean = 10,sd = 5),
+  Y = L^2 + rnorm(100,mean = 10,sd = 5)
+)
 
-cobb <- tibble(crescente = crescente,
-       constante = constante,
-       decrescente = decrescente,
-       x1 = 1:20,
-       x2 = 1:20)
-
-cobb %>%
-  ggplot(aes(x1,x2)) +
-  geom_line(aes(y = crescente),colour = "red",size = 2) +
-  geom_line(aes(y = constante),colour = "blue",size = 2) +
-  geom_line(aes(y = decrescente),colour = "green",size = 2)
-
+lm(log(Y) ~ log(L),df)
 ```
 
+Não sei se vocês já estudaram, mas o nosso $\beta_2$ é a produtividade marginal do trabalho e como sabemos, ela segue a lei dos **rendimentos decrescentes**.
+
+Vamos checar!
+
+## Micro
+
+Primeiro iremos criar uma sequencia de trabalhadores que uma firma pode cotratar, essa é uma sequencia que vai de 1 até 50.
+
+```{r}
+L <- 1:50
+```
+
+Agora iremos calcular o produto dessa firma para cada quantidade de trabalhadores que ela pode ter de acordo a nossa função de produção
+
+```{r}
+produto <- 3.01 + L^0.74
+```
+
+Agora iremos calcular o produto marginal por trabalhador
+
+```{r}
+p_marginal <- produto - lag(produto)
+```
+
+## Plotando
+
+```{r}
+plot(L,p_marginal,type = "l")
+```
 
 
 # Exercicios
@@ -359,7 +456,7 @@ cobb %>%
 
 ## Regressão Linear Multipla
 
-A regressão linear multipla é quando estamos usando mais de uma varivel endógena.
+A regressão linear multipla é quando estamos usando mais de uma varivel **exógena**.
 
 Exemplo
 
@@ -387,7 +484,9 @@ summary(modelo) %>% broom::tidy()
 
 ## Regressão Linear Multipla
 
-$wage = -4.9 + 0.92 educ + 0.1 exp$
+### Estimação do modelo
+
+$$wage = -4.9 + 0.92 educ + 0.1 exp$$
 
 
 ## Regressão Linear Multipla
@@ -396,15 +495,15 @@ $wage = -4.9 + 0.92 educ + 0.1 exp$
 
 >- Além de todas as estatisticas que estudamos, agora temos mais três para analisar
 
->- A estatistica F é uma continha que testa se conjuntamente, há pelo menos um coeficiente diferente de zero. 
+>- A **estatistica F** é uma continha que testa se conjuntamente, há pelo menos um coeficiente diferente de zero. 
 
 >- Porém não há uma regra de bolso pois ele depende do graus de liberdade da regressão, então olhamos o valor - p por facilidade.
 
->- A regra de bolso do valor - p é, caso seja menor que 5%(0.05), sua regressão tem pelo menos um coeficiente diferente de zero.
+>- A regra de bolso do **valor - p** é, caso seja menor que 5%(0.05), sua regressão tem pelo menos um coeficiente diferente de zero.
 
->- O R² de uma regressão sempre irá crescer ou pelo menos ficar constante caso você acrescente uma variavel endógena
+>- Outra coisa que sabemos é que o R² de uma regressão sempre irá crescer ou pelo menos ficar constante caso você acrescente uma variavel enxógena
 
->- Por isso, para compararmos regressões multiplas, usamos o R² ajustado, que penaliza o incremento de variáveis que não ajudem o modelo a explicar melhor
+>- Por isso, para compararmos regressões multiplas, usamos o **R² ajustado**, que penaliza o incremento de variáveis que não ajudem o modelo a explicar melhor
 
 ## Regressão Linear Multipla
 
@@ -414,31 +513,69 @@ $wage = -4.9 + 0.92 educ + 0.1 exp$
 summary(modelo) %>% broom::glance()
 ```
 
+## Test F
+
+O teste F, chamado de teste F de significancia global da regressão, é calculado pela seguinte forma:
+
+$$
+F = \frac{SQR}{SQT}
+$$
+Ele testa se ,conjuntamente, alguma das variáveis enxógenas do modelo é **diferente** de zero.
+
+H0 = Conjuntamente, os coeficientes são iguais a zero
+H1 = Há pelo menos 1 coeficiente diferente de zero
+
+Calculado a estatistica F, comparamos com o F crítico que está na tabela de distribuição F de acordo com os graus de liberdade.
+
+Para isso não ser preciso, olhamos então para o valor-P
+
+## Valor P
+
+O **valor P**, resumidamente é:
+
+O menor nível de significância com que se rejeitaria a hipótese nula.
+
+Vocês podem não saber, mas estamos testando hipóteses com um nível de significância, respectivamente 10%,5% e 1%.
+
+Normalmente, 5% de significancia é o valor padrão. Então, caso o valor p esteja abaixo disso, nós rejeitamos H0.
+
+
+## R² Ajustado
+
+
+$$
+R^2_{ajustado} = 1 - \frac{n - 1}{n - (k + 1)}(1 - R^2)
+$$
+
+Quando quisermos comparar modelos com diferentes variáveis exógenas, usamos o **R² ajustado**.
+
+$n$ = Tamanho da amostra
+
+$k$ = Total de variáveis exógenas (Intercepto não conta)
 
 
 # Regressão com variáveis categóricas
 
 ## Regressão com variáveis categóricas
 
->- Até agora vimos regressões somente com variáveis endógenas contínuas e/ou discretas.
+>- Até agora vimos regressões somente com variáveis exógenas **contínuas** e/ou **discretas**.
 
->- Agora iremos ver como aplicar regressões com variaveis exógenas categóricas, na qual representam classes.
+>- Agora iremos ver como aplicar regressões com variaveis exógenas **categóricas**, na qual representam classes.
 
 >- Para quem não sabe o que são as categóricas aqui em baixo vão dois exemplos:
 
->- Categóricas cardinais: Quando não há um ordenamento. Sexo (H,M)
+>- Categóricas **cardinais**: Quando não há um ordenamento. Sexo (H,M)
 
->- Categóricas ordinais: Quando há um ordenamento. Educação (Doutorado > Mestrado > Graduação)
+>- Categóricas **ordinais**: Quando há um ordenamento. Educação (Doutorado > Mestrado > Graduação)
 
 >- No R essas variáveis são da classe `factor`
 
-# Exercicios
 
 ## Regressão com variáveis categóricas
 
 ```{r}
 # Gender é uma variavel categorica
-modelo <- train(wage ~ education + experience + gender, 
+modelo <- train(wage ~ education + gender, 
       method = "lm",
       data = CPS1985)
 ```
@@ -451,8 +588,36 @@ summary(modelo) %>% broom::tidy()
 
 ## Regressão com variáveis categóricas
 
+### Modelo estimado
 
-$wage = -4.16 + educ 0.94 + exp 0.11 - genderfemale 2.33$
+$$
+wage = 0.21 + educ 0.75  - genderfemale 2.12
+$$
+- O coeficiente da variavel `gender` é -2.12.
+
+- Quando gender é **female**, o coeficiente é multiplicado por 1
+
+- Quando gender é **male**, o coeficiente é multiplicado por 0
+
+- O resultado dessa multiplicação é somado ao intercepto, que tem valor de 0.21
+
+## Regressão com variáveis categóricas
+
+### Fazendo a conta
+
+>- O indivíduo **A**, estudou por 10 anos e é do gênero masculino, logo:
+>- $wage = 0.21 + 10 * 0.75 - 0 * 2.12$ = $7.71$
+>- O indivíduo **B**, estudou por 10 anos e é do gênero feminino, logo:
+>- $wage = 0.21 + 10 * 0.75 - 1 * 2.12$ = $5.59$
+
+## Graficamente
+
+```{r echo=FALSE}
+CPS1985 %>%
+  ggplot(aes(education,wage,colour = gender)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
 
 
 # Modelo Logístico
@@ -483,7 +648,10 @@ summary(modelo)
 
 ## Modelo Logístico
 
-$gender = -1.44 - 0.13 wage + 0.14 educ + 0.02 exp$
+### Especificação
+$$
+gender = -1.44 - 0.13 wage + 0.14 educ + 0.02 exp
+$$
 
 
 ## Modelo Logístico
@@ -505,11 +673,13 @@ wage = 5.1, educ = 8, exp = 21, qual seria a probabilidade dessa pessoa ser do g
 
 Jogando na fórmula
 
-$-1.44 - 0.13*5.1 + 0.14*8 + 0.02*21 = 0.76$
+$$
+-1.44 - 0.13*5.1 + 0.14*8 + 0.02*21 = 0.76
+$$
 
 Jogando agora na formula $\frac{1}{1 + e^(0.76)} = 0.31$
 
-A chance de ser do gênenro feminino seria de 31%
+A chance de ser do gênero feminino seria de 31%
 
 ## Modelo Logístico
 
@@ -528,7 +698,6 @@ Podemos automatizar todo esse processo no R com a função `predict`, na qual no
 
 ```{r}
 previsao <-predict(modelo,newdata = CPS1985)
-previsao
 ```
 
 ## Modelo Logístico
@@ -547,10 +716,97 @@ Ou seja, nosso modelo acertou no geral 65% das classificações.
 Para saber mais sobre essa matriz, [clique aqui](https://medium.com/data-hackers/entendendo-o-que-%C3%A9-matriz-de-confus%C3%A3o-com-python-114e683ec509)
 
 
+# Testando premissas do modelo
+
+## Padrão dos erros
+
+Todo modelo de linear tem premissas quanto ao seu erro (resíduo), destacando se :
+
+- Indepêndencia
+- Homocedasticidade (Variancia constante)
+- Segue uma distribuição normal
+
+Caso essas premissas não forem atendidas, podemos ter um modelo ineficiente e/ou tendencioso.
+
+Vamos aos testes
+
+## Nosso modelo a ser testado
+
+### Especificação
+
+$$
+wage = \beta_1 + educ\beta_2
+$$
+Usaremos a função `lm` ao invés de `train`
+
+```{r echo=TRUE}
+modelo <- lm(wage ~ education,
+                method = "lm",
+                data = CPS1985)
+library(lmtest) # Pacote de testes
+```
 
 
+## Testando indepêndencia
+
+Iremos usar o pacote `lmtest` para usar a função `bgtest` que aplica o teste de Breusch-Godfrey
+
+H0 = Há independencia
+
+H1 = Não há independencia
+
+Se o valor p < 0.05, rejeitamos H0, caso o contrario, não rejeitamos
+
+```{r eval=FALSE, include=T}
+bgtest(modelo)
+```
+
+## Testando indepêndencia
+
+```{r echo=FALSE}
+bgtest(modelo)
+```
+
+## Testando Homocedasticidade
+
+Iremos usar o pacote `lmtest` para usar a função `ncvTest` 
+
+H0 = Homocedástico
+H1 = Não Homocedástico (Héterocedástico)
+
+Se o valor p < 0.05, rejeitamos H0, caso o contrario, não rejeitamos
+
+```{r eval=FALSE, include=T}
+ncvTest(modelo)
+```
+
+## Testando Homocedasticidade
 
 
+```{r echo=FALSE}
+ncvTest(modelo)
+```
 
+## Testando Normalidade
+
+Iremos a função `shapiro.test` para realizar o teste Shapiro-Wilk 
+
+H0 = Normal
+H1 = Não normal
+
+Se o valor p < 0.05, rejeitamos H0, caso o contrario, não rejeitamos
+
+```{r eval=FALSE, include=T}
+shapiro.test(modelo$residuals)
+```
+
+## Testando Normalidade
+
+
+```{r echo=FALSE}
+shapiro.test(modelo$residuals)
+```
+
+# Exercicios
 
 

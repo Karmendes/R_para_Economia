@@ -52,39 +52,51 @@ df_point <- bolsa %>% group_by(symbol) %>%
 ```
 
 
-1- Observe o data frame df_barra com head()
+## Exercicio 1 
+
+Observe o data frame df_barra com head()
 
 ```{r}
 
 ```
 
-2- Tente construir um grafico de barra onde a coluna symbol seja o eixo x e a coluna Retornos seja o eixo y. 
+## Exercicio 2
 
-```{r}
-
-```
-
-
-3- Observe o data frame df_line com head()
-
-```{r}
-
-```
-
-4- Tente construir um grafico de linha onde a coluna date seja o eixo x e a coluna close seja o eixo y. 
+Tente construir um grafico de barra onde a coluna symbol seja o eixo x e a coluna Retornos seja o eixo y. 
 
 ```{r}
 
 ```
 
 
-5- Observe o data frame df_point com head()
+## Exercicio 3
+
+Observe o data frame df_line com head()
 
 ```{r}
 
 ```
 
-6- Tente construir um grafico de pontos onde a coluna ITUB4.SA seja o eixo x e a coluna PETR4.SA seja o eixo y. 
+## Exercicio 4
+
+Tente construir um grafico de linha onde a coluna date seja o eixo x e a coluna close seja o eixo y. 
+
+```{r}
+
+```
+
+
+## Exercicio 5 
+
+Observe o data frame df_point com head()
+
+```{r}
+
+```
+
+## Exercicio 6
+
+Tente construir um grafico de pontos onde a coluna ITUB4.SA seja o eixo x e a coluna PETR4.SA seja o eixo y. 
 
 ```{r}
 

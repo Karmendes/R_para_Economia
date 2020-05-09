@@ -59,47 +59,59 @@ Se eu quiser saber o valor de 3²
 ```
 
 
-# Exercicio 1
+# Operadores de atribuição
 
-1-  Falando sobre operadores de atribuição, crie uma variavel e insira nela o valor 10
+## Exercicio 1 
+
+Falando sobre operadores de atribuição, crie uma variavel e insira nela o valor 10
 
 ```{r}
 
 ```
 
-2- Agora imprima ela na tela usando a função print()
+## Exercicio 2
+
+Agora imprima ela na tela usando a função print()
 
 Dica: Para saber como usar a função, sublinhe-a e tecle fn + F1 ou rode ?print
 ```{r}
 
 ```
 
-3- Com a mesma variável, insira agora o valor 15
+## Exercicio 3
+
+Com a mesma variável, insira agora o valor 15
 
 ```{r}
 
 ```
 
-4- Agora imprima novamente na tela
+## Exercicio 4
+
+Agora imprima novamente na tela
 
 ```{r}
 
 ```
 
-# Exercicio 2
+# Operadores Relacionais
 
-1- Falando agora sobre operadores relacionais, crie duas variaveis chamadas respectivamente x e y, passando para elas os valores 5 e 8
+## Exercicio 1
 
-```{r}
-
-```
-
-2- Use os operadores relacionais para descobrir se x é maior,menor,igual e diferente de y
+Falando agora sobre operadores relacionais, crie duas variaveis chamadas respectivamente x e y, passando para elas os valores 5 e 8
 
 ```{r}
 
 ```
 
+## Exercicio 2
+
+Use os operadores relacionais para descobrir se x é maior,menor,igual e diferente de y
+
+```{r}
+
+```
+
 ```{r}
 
 ```
@@ -112,11 +124,11 @@ Dica: Para saber como usar a função, sublinhe-a e tecle fn + F1 ou rode ?print
 
 ```
 
-# Exercicio 3
+# Objetos Atômicos
 
-Falando um pouco sobre objetos atômicos
+## Exercicio 1 
 
-1- Crie um objeto do tipo character e verifique sua classe
+Crie um objeto do tipo character e verifique sua classe
 
 Dica: Use a função class() para verificar a classe 
 
@@ -124,13 +136,17 @@ Dica: Use a função class() para verificar a classe
 
 ```
 
-2- Crie um objeto do tipo integer e verifique sua classe
+## Exercicio 2 
+
+Crie um objeto do tipo integer e verifique sua classe
 
 ```{r}
 
 ```
 
-3- Transforme um objeto do tipo integer para um do tipo character e verifique sua classe
+## Exercicio 3
+
+Transforme um objeto do tipo integer para um do tipo character e verifique sua classe
 
 Dica: Para trasnformar um objeto em character, use a função as.character()
 
@@ -138,7 +154,9 @@ Dica: Para trasnformar um objeto em character, use a função as.character()
 
 ```
 
-4- Transforme um objeto do tipo numeric para um do tipo logical e verifique sua classe
+## Exercicio 4 
+
+Transforme um objeto do tipo numeric para um do tipo logical e verifique sua classe
 
 Dica: Para trasnformar um objeto em logical, use a função as.logical()
 
@@ -146,16 +164,20 @@ Dica: Para trasnformar um objeto em logical, use a função as.logical()
 
 ```
 
-# Exercicio 4
+# Vetores
 
-1- Falando de vetores, crie um vetor de numerics contendo 5 elementos e grave na variavel x. Crie outro vetor contendo 4 elementos numericos e grave na variavel y
+## Exercicio 1
+
+Falando de vetores, crie um vetor de numerics contendo 5 elementos e grave na variavel x. Crie outro vetor contendo 4 elementos numericos e grave na variavel y
 
 ```{r}
 
 
 ```
 
-2- Agora faça as operaçoes básicas entre eles
+## Exercicio 2 
+
+Agora faça as operaçoes básicas entre eles
 
 ```{r}
 # Soma
@@ -203,34 +225,44 @@ Dica: Pesquise no google sobre slice de vetores em R (Nome do que estamos fazend
 ```
 
 
-# Exercicio 5
+# Matrizes
 
-1- Falando sobre matrizes, crie uma matriz 3x3 e grave na variavel m1
+## Exericio 1
 
-```{r}
-
-```
-
-2- Agora crie uma matriz 3x3 e grave na variavel m2
+Falando sobre matrizes, crie uma matriz 3x3 e grave na variavel m1
 
 ```{r}
 
 ```
 
+## Exericio 2 
 
-3- Use a função t() (função que retorna a transposta da matriz) em m2 e grave numa variavel chamada tm2
-
-```{r}
-
-```
-
-4 - Multiplique tm2 e m1 e grave na variavel m4
+Agora crie uma matriz 3x3 e grave na variavel m2
 
 ```{r}
 
 ```
 
-5- Use a função det() em m4 e verifique se o resultado é diferente de 0
+
+## Exericio 3 
+
+Use a função t() (função que retorna a transposta da matriz) em m2 e grave numa variavel chamada tm2
+
+```{r}
+
+```
+
+## Exericio 4 
+
+Multiplique tm2 e m1 e grave na variavel m4
+
+```{r}
+
+```
+
+## Exericio 5 
+
+Use a função det() em m4 e verifique se o resultado é diferente de 0
 
 Caso a função det não funcione, provavelmente sua matriz não é N X N ou ela tem alguma combinação linear que faz o determinante ser 0
 
@@ -238,13 +270,17 @@ Caso a função det não funcione, provavelmente sua matriz não é N X N ou ela
 
 ```
 
-6 - Use a função solve (Calcula a inversa da matriz) em m4 e grave em m5
+## Exericio 6 
+
+Use a função solve (Calcula a inversa da matriz) em m4 e grave em m5
 
 ```{r}
 
 ```
 
-7- Agora multiplique m5 com m4 usando o operador %*%, que é usado para multiplicação matricial. Se o resultado for uma matriz preenchida por 1 na diagonal e zero no resto, você acertou tudo!
+## Exericio 7 
+
+Agora multiplique m5 com m4 usando o operador %*%, que é usado para multiplicação matricial. Se o resultado for uma matriz preenchida por 1 na diagonal e zero no resto, você acertou tudo!
 
 dica: Bote a operação de multiplicação dentro da função round(operação)
 
@@ -252,11 +288,13 @@ dica: Bote a operação de multiplicação dentro da função round(operação)
 
 ```
 
-# Exercicio 6
+# Data Frames
 
 Falando sobre data frames:
 
-1- Imagine que eu tenha os seguintes dados
+## Exericio 1 
+
+Imagine que eu tenha os seguintes dados
 
 Continente: America,Europa,Asia,Africa
 Paises: Brasil,Portugal,China,Togo
@@ -268,26 +306,34 @@ Você consegue fazer um data frame contendo essas informações?
 
 ```
 
-2- Como você sabe, o R possui muitos data frames já carregados. Você pode dar uma olhada rodando o comando abaixo.
+## Exericio 2
+
+Como você sabe, o R possui muitos data frames já carregados. Você pode dar uma olhada rodando o comando abaixo.
 
 ```{r}
 data()
 ```
 
 
-3- Use a lista da ultima questão para encontrar dataframe USArrests e passe - o  como parâmetro da função head() para visualizar as primeiras linhas
+## Exericio 3
+
+Use a lista da ultima questão para encontrar dataframe USArrests e passe - o  como parâmetro da função head() para visualizar as primeiras linhas
 
 ```{r}
 
 ```
 
-4- Agora use a função colnames para obter somente os nomes das colunas.
+## Exericio 4 
+
+Agora use a função colnames para obter somente os nomes das colunas.
 
 ```{r}
 
 ```
 
-5- Agora use a função summary() que irá trazer um resumo estatistico de cada coluna do data frame
+## Exericio 5 
+
+Agora use a função summary() que irá trazer um resumo estatistico de cada coluna do data frame
 
 ```{r}
 
@@ -355,27 +401,31 @@ Extraindo a 6° linha inteira
 Agora extraia da 4° linha a 10° linha conjuntamente com a 1° e 2° coluna
 
 
+# Listas
 
-
-
-# Exercicio 7
 
 Falando Sobre Listas,
 
-1- Crie um vetor,uma matriz e um dataframe e coloque -os em um lista
+## Exericio 1 
+
+Crie um vetor,uma matriz e um dataframe e coloque -os em um lista
 
 ```{r}
 
 ```
 
 
-2- Agora crie uma lista com os mesmos objetos do exercicio anterior mais a lista que você criou no exercicio anterior.
+## Exericio 2 
+
+Agora crie uma lista com os mesmos objetos do exercicio anterior mais a lista que você criou no exercicio anterior.
 
 ```{r}
 
 ```
 
-3- Imprima na tela a lista
+## Exericio 3 
+
+Imprima na tela a lista
 
 ```{r}
 

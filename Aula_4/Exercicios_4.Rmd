@@ -24,32 +24,42 @@ library(AER)
 
 # Exercicio de regressão linear
 
-1- Rode o chunck abaixo
+## Exercicio 1 
+
+Rode o chunck abaixo
 
 ```{r}
 data(HousePrices)
 ```
 
-2- Rode o chunck abaixo
+## Exercicio 2
+
+Rode o chunck abaixo
 
 ```{r}
 ?HousePrices
 ```
 
-3- Use a função head() passando como parâmetro o data frame HousePrices
+## Exercicio 3
+
+Use a função head() passando como parâmetro o data frame HousePrices
 
 ```{r}
 
 ```
 
-4- Use a função names() passando como parâmetro o data frame HousePrices para obter o nome das colunas do data frame
+## Exercicio 4
+
+Use a função names() passando como parâmetro o data frame HousePrices para obter o nome das colunas do data frame
 
 ```{r}
 
 ```
 
 
-5- Complete a função train() abaixo para construirmos um modelo onde a nossa variavel endógena é a coluna price e a variavel exógena é a coluna lotsize (Tamanho da casa em m²)
+## Exercicio 5
+
+Complete a função train() abaixo para construirmos um modelo onde a nossa variavel endógena é a coluna price e a variavel exógena é a coluna lotsize (Tamanho da casa em m²)
 
 ```{r}
 modelo <- train(#endógena ~ #exógena,
@@ -57,27 +67,31 @@ modelo <- train(#endógena ~ #exógena,
                 data = HousePrices)
 ```
 
-6- Rode o chunck abaixo para visualizar as estatisticas do modelo e responda as perguntas seguintes:
+## Exercicio 6
+
+Rode o chunck abaixo para visualizar as estatisticas do modelo e responda as perguntas seguintes:
 
 ```{r}
 summary(modelo) %>% broom::tidy()
 ```
 
-a) Qual o sinal da relação entre lotsize e preço? Faz sentido para você essa relação
+### Exercicio 6.1
+
+Qual o sinal da relação entre lotsize e preço? Faz sentido para você essa relação
 
 ```{r}
 
 ```
 
 
-b) Se minha casa tiver tiver 300 m², qual seria a estimativa de preço?
+### Exercicio 6.2 Se minha casa tiver tiver 300 m², qual seria a estimativa de preço?
 
 ```{r}
 
 ```
 
 
-c) Calcule a estatistica t e diga se ela é maior que |2|
+### Exercicio 6.3 Calcule a estatistica t e diga se ela é maior que |2|
 
 ```{r}
 
@@ -90,7 +104,9 @@ Rode o chunck abaixo
 summary(modelo) %>% broom::glance()
 ```
 
-d) A regressão explica qual % da variação do preço das casas?
+### Exercicio 6.4 
+
+A regressão explica qual % da variação do preço das casas?
 
 
 
@@ -124,7 +140,9 @@ packs = Quantidade de cigarros vendidas
 price = Preço do cigarro
 income = Renda
 
-1) Complete o modelo com a variavel endógena sendo packs e a variavel exogena sendo price
+## Exercicio 1 
+
+Complete o modelo com a variavel endógena sendo packs e a variavel exogena sendo price
 
 ```{r}
 elast_price_demand <- train(#endógena ~ #exógena,
@@ -132,21 +150,27 @@ elast_price_demand <- train(#endógena ~ #exógena,
                             data = CigarettesB)
 ```
 
-2) Rode o chunck abaixo para visualizar as estatisticas do modelo e responda as perguntas seguintes:
+## Exercicio 2
+
+Rode o chunck abaixo para visualizar as estatisticas do modelo e responda as perguntas seguintes:
 
 ```{r}
 summary(elast_price_demand) %>% broom::tidy()
 ```
 
-a) Como nós poderiamos classificar esse bem quanto à sua elasticidade
+### Exercicio 2.1 
 
-b) Calcule a estatistica t e verifique se ela atenda a nossa regra de bolso
+Como nós poderiamos classificar esse bem quanto à sua elasticidade
+
+### Exercicio 2.2 
+
+Calcule a estatistica t e verifique se ela atenda a nossa regra de bolso
 
 ```{r}
 
 ```
 
-3) 
+## Exercicio 3 
 
 Agora iremos calcular a elasticidade renda da demanda.
 
@@ -167,15 +191,21 @@ elast_income_demand <- train(#endógena ~ #exógena,
                             data = CigarettesB)
 ```
 
-4) Rode o chunck abaixo para visualizar as estatisticas do modelo e responda as perguntas seguintes:
+## Exercicio 4 
+
+Rode o chunck abaixo para visualizar as estatisticas do modelo e responda as perguntas seguintes:
 
 ```{r}
 summary(elast_price_demand) %>% broom::tidy()
 ```
 
-a) Como nós poderiamos classificar esse bem quanto à sua elasticidade
+### Exercicio 4.1 
 
-b) Calcule a estatistica t e verifique se ela atenda a nossa regra de bolso
+Como nós poderiamos classificar esse bem quanto à sua elasticidade
+
+## Exercicio 4.2
+
+Calcule a estatistica t e verifique se ela atenda a nossa regra de bolso
 
 ```{r}
 
@@ -188,7 +218,9 @@ b) Calcule a estatistica t e verifique se ela atenda a nossa regra de bolso
 
 # Exercicios de regressão múltipla
 
-1- Complete a função train() abaixo para construirmos um modelo onde a nossa variavel endógena é a coluna price e a variavel exógena é a coluna lotsize (Tamanho da casa em m²) e bedrooms (N° de quartos)
+## Exercicio 1 
+
+Complete a função train() abaixo para construirmos um modelo onde a nossa variavel endógena é a coluna price e a variavel exógena é a coluna lotsize (Tamanho da casa em m²) e bedrooms (N° de quartos)
 
 ```{r}
 modelo <- train(#endógena ~ #exógena1 + #exógena2,
@@ -196,27 +228,35 @@ modelo <- train(#endógena ~ #exógena1 + #exógena2,
                 data = HousePrices)
 ```
 
-2- Rode o chunck abaixo para visualizar as estatisticas do modelo e responda as perguntas seguintes:
+## Exercicio 2
+
+Rode o chunck abaixo para visualizar as estatisticas do modelo e responda as perguntas seguintes:
 
 ```{r}
 summary(modelo) %>% broom::tidy()
 ```
 
-a) Qual o sinal da relação entre lotsize e bedrooms em relação ao preço? Faz sentido para você essa relação
+### Exercicio 2.1
+
+Qual o sinal da relação entre lotsize e bedrooms em relação ao preço? Faz sentido para você essa relação
 
 ```{r}
 
 ```
 
 
-b) Se minha casa tiver tiver 300 m² e 2 quartos, qual seria a estimativa de preço?
+### Exercicio 2.2
+
+Se minha casa tiver tiver 300 m² e 2 quartos, qual seria a estimativa de preço?
 
 ```{r}
 
 ```
 
 
-c) As estatisticas T dos coeficientes são maiores que |2|?
+### Exercicio 2.3
+
+As estatisticas T dos coeficientes são maiores que |2|?
 
 
 
@@ -226,9 +266,13 @@ Rode o chunck abaixo
 summary(modelo) %>% broom::glance()
 ```
 
-d) A regressão explica qual % da variação do preço das casas?
+### Exercicio 2.4 
 
-e) Qual o valor do R² ajustado? Ele é menor que o R²?
+A regressão explica qual % da variação do preço das casas?
+
+### Exercicio 2.5
+
+Qual o valor do R² ajustado? Ele é menor que o R²?
 
 
 
@@ -236,7 +280,9 @@ e) Qual o valor do R² ajustado? Ele é menor que o R²?
 
 # Exercicio de Regressão com variáveis categóricas
 
-1- Complete a função train() abaixo para construirmos um modelo onde a nossa variavel endógena é a coluna price e a variavel exógena é a coluna lotsize (Tamanho da casa em m²) e aircon (Se há ou não aquecimento central)
+## Exercicio 1
+
+Complete a função train() abaixo para construirmos um modelo onde a nossa variavel endógena é a coluna price e a variavel exógena é a coluna lotsize (Tamanho da casa em m²) e aircon (Se há ou não aquecimento central)
 
 ```{r}
 modelo <- train(#endógena ~ #exógena1 + #exógena2,
@@ -244,13 +290,17 @@ modelo <- train(#endógena ~ #exógena1 + #exógena2,
                 data = HousePrices)
 ```
 
-2- Rode o chunck abaixo para visualizar as estatisticas do modelo e responda as perguntas seguintes:
+## Exercicio 
+
+2 Rode o chunck abaixo para visualizar as estatisticas do modelo e responda as perguntas seguintes:
 
 ```{r}
 summary(modelo) %>% broom::tidy()
 ```
 
-a) Qual a estimativa de preço para uma casa com 200m² e com aquecimento central?
+## Exercicio 2.1
+
+Qual a estimativa de preço para uma casa com 200m² e com aquecimento central?
 
 ```{r}
 
