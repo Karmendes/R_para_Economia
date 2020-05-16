@@ -66,6 +66,7 @@ Se eu quiser saber o valor de 3²
 Falando sobre operadores de atribuição, crie uma variavel e insira nela o valor 10
 
 ```{r}
+x <- 10
 
 ```
 
@@ -75,6 +76,9 @@ Agora imprima ela na tela usando a função print()
 
 Dica: Para saber como usar a função, sublinhe-a e tecle fn + F1 ou rode ?print
 ```{r}
+print(x)
+
+?print()
 
 ```
 
@@ -84,6 +88,8 @@ Com a mesma variável, insira agora o valor 15
 
 ```{r}
 
+x <- 15
+
 ```
 
 ## Exercicio 4
@@ -91,6 +97,8 @@ Com a mesma variável, insira agora o valor 15
 Agora imprima novamente na tela
 
 ```{r}
+
+print(x)
 
 ```
 
@@ -101,7 +109,8 @@ Agora imprima novamente na tela
 Falando agora sobre operadores relacionais, crie duas variaveis chamadas respectivamente x e y, passando para elas os valores 5 e 8
 
 ```{r}
-
+x <- 5
+y <- 8
 ```
 
 ## Exercicio 2
@@ -109,19 +118,23 @@ Falando agora sobre operadores relacionais, crie duas variaveis chamadas respect
 Use os operadores relacionais para descobrir se x é maior,menor,igual e diferente de y
 
 ```{r}
-
+# maior
+x > y 
 ```
 
 ```{r}
-
+# menor
+x < y
 ```
 
 ```{r}
-
+# igual
+x == y
 ```
 
 ```{r}
-
+# diferente
+x != y
 ```
 
 # Objetos Atômicos
@@ -133,7 +146,7 @@ Crie um objeto do tipo character e verifique sua classe
 Dica: Use a função class() para verificar a classe 
 
 ```{r}
-
+x <- "Lucas"
 ```
 
 ## Exercicio 2 
@@ -141,7 +154,9 @@ Dica: Use a função class() para verificar a classe
 Crie um objeto do tipo integer e verifique sua classe
 
 ```{r}
-
+x <- 2.45 # Crio a variavel
+x <- as.integer(x) # Transformo em inteiro
+class(x) # Verifico a classe
 ```
 
 ## Exercicio 3
@@ -152,6 +167,8 @@ Dica: Para trasnformar um objeto em character, use a função as.character()
 
 ```{r}
 
+x <- as.character(x)
+class(x)
 ```
 
 ## Exercicio 4 
@@ -161,7 +178,9 @@ Transforme um objeto do tipo numeric para um do tipo logical e verifique sua cla
 Dica: Para trasnformar um objeto em logical, use a função as.logical()
 
 ```{r}
-
+x <- 12
+x <- as.logical(x)
+class(x)
 ```
 
 # Vetores
@@ -171,8 +190,8 @@ Dica: Para trasnformar um objeto em logical, use a função as.logical()
 Falando de vetores, crie um vetor de numerics contendo 5 elementos e grave na variavel x. Crie outro vetor contendo 4 elementos numericos e grave na variavel y
 
 ```{r}
-
-
+x <- c(1,3,5,3,5)
+y <- c(2,3,4,5)
 ```
 
 ## Exercicio 2 
@@ -181,22 +200,22 @@ Agora faça as operaçoes básicas entre eles
 
 ```{r}
 # Soma
-
+x + y
 ```
 
 ```{r}
 # Subtração
-
+x - y
 ```
 
 ```{r}
 # Divisão
-
+x/y
 ```
 
 ```{r}
 # Multiplicação
-
+x*y
 ```
 
 Se por a caso quisessemos extrair um elemento de um vetor, como fariamos? Nesse caso é só passar a variável que o vetor está contido e logo após passar a posição do elemento que queremos extrair dentro de colchetes
@@ -221,7 +240,7 @@ Viu como é facil? Agora tente extrair para mim os characteres "a" e "b"
 Dica: Pesquise no google sobre slice de vetores em R (Nome do que estamos fazendo)
 
 ```{r}
-
+vetor[c(1,3)]
 ```
 
 
@@ -233,13 +252,20 @@ Falando sobre matrizes, crie uma matriz 3x3 e grave na variavel m1
 
 ```{r}
 
+m1 <- matrix(c(1,3,5,2,5,6,3,2,4),nc = 3,nr = 3)
+m1
+
 ```
+
 
 ## Exericio 2 
 
 Agora crie uma matriz 3x3 e grave na variavel m2
 
 ```{r}
+
+m2 <- matrix(c(13,173515,246,27,1,87,321,3857,4229),nc = 3,nr = 3)
+m2
 
 ```
 
@@ -250,6 +276,7 @@ Use a função t() (função que retorna a transposta da matriz) em m2 e grave n
 
 ```{r}
 
+tm2 <- t(m2)
 ```
 
 ## Exericio 4 
@@ -257,7 +284,7 @@ Use a função t() (função que retorna a transposta da matriz) em m2 e grave n
 Multiplique tm2 e m1 e grave na variavel m4
 
 ```{r}
-
+m4 <- tm2 * m1
 ```
 
 ## Exericio 5 
@@ -268,6 +295,8 @@ Caso a função det não funcione, provavelmente sua matriz não é N X N ou ela
 
 ```{r}
 
+det(m4)
+
 ```
 
 ## Exericio 6 
@@ -275,7 +304,7 @@ Caso a função det não funcione, provavelmente sua matriz não é N X N ou ela
 Use a função solve (Calcula a inversa da matriz) em m4 e grave em m5
 
 ```{r}
-
+m5 <- solve(m4)
 ```
 
 ## Exericio 7 
@@ -285,6 +314,8 @@ Agora multiplique m5 com m4 usando o operador %*%, que é usado para multiplica�
 dica: Bote a operação de multiplicação dentro da função round(operação)
 
 ```{r}
+
+round(m5 %*% m4)
 
 ```
 
@@ -303,7 +334,13 @@ IDH: 0.5,0.9,0.6,0.4
 Você consegue fazer um data frame contendo essas informações?
 
 ```{r}
+df1 <- data.frame(
+  Continente = c("America","Europa","Asia","Africa"),
+  Paises = c("Brasil","Portugal","China","Togo"),
+  IDH = c(0.5,0.9,0.6,0.4)
+)
 
+df1
 ```
 
 ## Exericio 2
@@ -320,7 +357,7 @@ data()
 Use a lista da ultima questão para encontrar dataframe USArrests e passe - o  como parâmetro da função head() para visualizar as primeiras linhas
 
 ```{r}
-
+head(USArrests)
 ```
 
 ## Exericio 4 
@@ -328,7 +365,7 @@ Use a lista da ultima questão para encontrar dataframe USArrests e passe - o  c
 Agora use a função colnames para obter somente os nomes das colunas.
 
 ```{r}
-
+colnames(USArrests)
 ```
 
 ## Exericio 5 
@@ -336,7 +373,7 @@ Agora use a função colnames para obter somente os nomes das colunas.
 Agora use a função summary() que irá trazer um resumo estatistico de cada coluna do data frame
 
 ```{r}
-
+summary(USArrests)
 ```
 
 Se lembra como você extrai-a elementos em um vetor (slice)? Bom, há como fazer isso também em data frames e matrizes, vamos ver uma demonstração.
@@ -365,11 +402,14 @@ Extraindo a 6° linha da 2° coluna
 
 ```{r}
 
+USArrests[6,2]
+
 ```
 Extraindo a 2° linha da 4° coluna
 
 ```{r}
 
+USArrests[2,4]
 ```
 
 Para extrair uma coluna ou linha inteira de um data frame, você deve deixar em branco a posição relativa a elas dentro do colchete
@@ -377,13 +417,15 @@ Para extrair uma coluna ou linha inteira de um data frame, você deve deixar em 
 Exemplo: Extraindo a 1° Linha e todas as colunas 
 
 ```{r}
-USArrests[1,]
+class(USArrests[1,])
+
 ```
 
 Exemplo: Extraindo a 1° coluna e todas as linhas 
 
 ```{r}
-USArrests[,1]
+class(USArrests[,1])
+
 ```
 
 
@@ -391,14 +433,23 @@ USArrests[,1]
 Extraindo a 2° coluna inteira
 
 ```{r}
-
+USArrests[,2]
 ```
 Extraindo a 6° linha inteira
 
 ```{r}
+USArrests[6,]
+```
+
+
+Agora extraia da 4° linha a 10° linha conjuntamente com a 1° e 2° coluna
+
+
+```{r}
+USArrests[c(4:10),c(1:2)]
 
 ```
-Agora extraia da 4° linha a 10° linha conjuntamente com a 1° e 2° coluna
+
 
 
 # Listas
@@ -411,6 +462,18 @@ Falando Sobre Listas,
 Crie um vetor,uma matriz e um dataframe e coloque -os em um lista
 
 ```{r}
+vec <- c(1,2,3)
+
+df <- data.frame(Coluna1 = c(1,2),
+                 Coluna2 = c(3,4))
+
+m1 <- matrix(seq(1,8),nc = 2)
+
+list1 <- list(vec,
+              df,
+              m1)
+
+list1
 
 ```
 
@@ -420,7 +483,23 @@ Crie um vetor,uma matriz e um dataframe e coloque -os em um lista
 Agora crie uma lista com os mesmos objetos do exercicio anterior mais a lista que você criou no exercicio anterior.
 
 ```{r}
+vec <- c(1,2,3)
 
+df <- data.frame(Coluna1 = c(1,2),
+                 Coluna2 = c(3,4))
+
+m1 <- matrix(seq(1,8),nc = 2)
+
+list1 <- list(vec,
+              df,
+              m1)
+
+list2 <- list(
+  vec,
+  df,
+  m1,
+  list1
+)
 ```
 
 ## Exericio 3 
@@ -428,7 +507,7 @@ Agora crie uma lista com os mesmos objetos do exercicio anterior mais a lista qu
 Imprima na tela a lista
 
 ```{r}
-
+print(list2)
 ```
 
 Você pode ver no console que há numeros com duplos colchetes certo? Eles são o que chamamos de nós da lista. Ele nos ajudam na hora extrair dados de uma lista (slice). O procedimento pode ser visualizado na imagem abaixo
@@ -443,32 +522,43 @@ Para isso você terá de criar uma lista com os elementos do primeiro retangulo 
 
 ```{r}
 # Criar a lista nomeada "a"
-```
 
-```{r}
-
-```
-
-
-```{r}
-
-
-```
-
-```{r}
-
+a <- list(
+  c(1,2,3),
+  "a string",
+  3.14525,
+  list(
+    -1,
+    -5
+  )
+)
 
 ```
 
 ```{r}
+a[[4]]
+```
 
+
+```{r}
+class(a[[2]])
+```
+
+```{r}
+a[4]
+
+```
+
+```{r}
+
+a[[4]][1]
 
 
 ```
 
 ```{r}
 
-
+a[[4]][[1]]
 
 ```
 

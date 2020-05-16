@@ -1,0 +1,54 @@
+---
+title: "Dashboard Eleitoral do "
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: row
+    vertical_layout: fill
+    social: [ "twitter", "facebook", "linkedin" ]
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(plotly)
+source("Mini_projeto_gabarito.R")
+
+knitr::opts_chunk$set(echo = TRUE,
+                      fig.width = 12,
+                      fig.height = 8,
+                      echo = F)
+```
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Distribuição de idade entre os candidatos
+
+```{r}
+g1 %>%
+  ggplotly()
+```
+
+
+### Proporção entre sexos dos candidatos
+
+```{r}
+g2 %>%
+  ggplotly()
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Grau de instrução dos candidatos
+
+```{r}
+g3 %>%
+  ggplotly()
+```
+
+### Proporção de cor entre os candidatos
+
+```{r}
+g4 %>%
+  ggplotly()
+```

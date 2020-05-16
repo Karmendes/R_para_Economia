@@ -84,19 +84,6 @@ knitr::opts_chunk$set(echo = T,
 
 ![](/cloud/project/image/layout4.png)
 
-
-
-# Disclaimer
-## Disclaimer
-
-Regra da criação de variáveis
-
-1° Não começa com Números: **1x** não é possivel. **x1** sim
-
-2° Há palavras que não podem se tornar variaveis: **TRUE** e **FALSE** por exemplo.
-
-3° Há diferenciação de minúscula para maiúscula: **X** != **x**
-
 # Operadores 
 
 ## Operadores 
