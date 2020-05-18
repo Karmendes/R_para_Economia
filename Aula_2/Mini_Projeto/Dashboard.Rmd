@@ -10,7 +10,7 @@ output:
 ```{r setup, include=FALSE}
 library(flexdashboard)
 library(plotly)
-source("Mini_projeto_gabarito.R")
+source("Mini_projeto.R")
 
 knitr::opts_chunk$set(echo = TRUE,
                       fig.width = 12,
